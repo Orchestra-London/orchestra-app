@@ -688,7 +688,60 @@
     sendBtn.disabled = msgInput.value.trim().length === 0;
   }
 
-  // ── Text-to-Speech ──
+  // ── Text-to-Speech (enhanced voice selection) ──
+  var bestVoice = null;
+
+  // Preferred voices ranked by quality (best first)
+  // iOS Premium/Enhanced voices sound very natural
+  var voicePrefs = [
+    'Daniel', 'Samantha', 'Karen', 'Moira', 'Rishi', 'Tessa',
+    'Google UK English Male', 'Google UK English Female',
+    'Microsoft Ryan', 'Microsoft Sonia',
+    'English United Kingdom', 'en-GB', 'en-US'
+  ];
+
+  function pickBestVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return;
+
+    // Try each preferred voice in order
+    for (var p = 0; p < voicePrefs.length; p++) {
+      var pref = voicePrefs[p].toLowerCase();
+      for (var v = 0; v < voices.length; v++) {
+        var name = (voices[v].name || '').toLowerCase();
+        var lang = (voices[v].lang || '').toLowerCase();
+        if (name.indexOf(pref) >= 0 || lang.indexOf(pref) >= 0) {
+          bestVoice = voices[v];
+          return;
+        }
+      }
+    }
+
+    // Fallback: any English voice
+    for (var i = 0; i < voices.length; i++) {
+      if ((voices[i].lang || '').indexOf('en') === 0) {
+        bestVoice = voices[i];
+        return;
+      }
+    }
+  }
+
+  // Voices load async on some browsers
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = pickBestVoice;
+  }
+  pickBestVoice();
+
+  function createUtterance(text) {
+    var utter = new SpeechSynthesisUtterance(text);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice ? bestVoice.lang : 'en-GB';
+    utter.rate = 0.95;   // Slightly slower = more natural
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    return utter;
+  }
+
   window.speakText = function(btn) {
     var text = btn.getAttribute('data-text');
     if (window.speechSynthesis.speaking) {
@@ -697,9 +750,7 @@
       btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
       return;
     }
-    var utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
-    utter.rate = 1.0;
+    var utter = createUtterance(text);
     btn.classList.add('speaking');
     btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
     utter.onend = function() {
@@ -711,9 +762,7 @@
 
   function autoSpeak(text) {
     if (window.speechSynthesis.speaking) return;
-    var utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
-    utter.rate = 1.0;
+    var utter = createUtterance(text);
     window.speechSynthesis.speak(utter);
   }
 
