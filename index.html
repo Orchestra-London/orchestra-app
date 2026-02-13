@@ -521,18 +521,12 @@
     chatArea.scrollTop = chatArea.scrollHeight;
   }
 
-  // ── Poll Sheet for Responses ──
+  // ── Poll for Responses ──
+  // Read chat data from a JSON file on GitHub Pages (updated by the daemon)
+  var DATA_URL = 'https://orchestra-london.github.io/orchestra-app/chat-data.json';
+
   function pollSheet() {
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        action: 'readSheet',
-        apiKey: API_KEY,
-        spreadsheetId: SPREADSHEET_ID,
-        sheetName: SHEET_NAME
-      })
-    })
+    fetch(DATA_URL + '?t=' + Date.now())  // cache-bust
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.status === 200 && data.data) {
