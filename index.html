@@ -300,7 +300,20 @@
 <body>
 
 <header>
-  <h1>ORCHESTRA <span>London</span></h1>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+    <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="12" y="47" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="12" y="21" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="43" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="13" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="37" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="5" width="19" height="19" rx="2" fill="#D5B56E"/>
+    </svg>
+    <h1>ORCHESTRA <span>London</span></h1>
+  </div>
 </header>
 
 <div class="status-strip">
@@ -510,14 +523,16 @@
 
   // ── Poll Sheet for Responses ──
   function pollSheet() {
-    var params = new URLSearchParams({
-      action: 'readSheet',
-      apiKey: API_KEY,
-      spreadsheetId: SPREADSHEET_ID,
-      sheetName: SHEET_NAME
-    });
-
-    fetch(WEBHOOK_URL + '?' + params.toString())
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'readSheet',
+        apiKey: API_KEY,
+        spreadsheetId: SPREADSHEET_ID,
+        sheetName: SHEET_NAME
+      })
+    })
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.status === 200 && data.data) {
