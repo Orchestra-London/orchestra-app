@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Orchestra</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23322C2C'/><rect x='12' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='12' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='12' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/></svg>" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23322C2C'/><rect x='12' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='12' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='12' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='39' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='12' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='39' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/><rect x='66' y='66' width='22' height='22' rx='3' fill='%23D5B56E'/></svg>">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #D5B56E;
+    --gold-light: #E8D4A0;
+    --gold-dark: #B89A4E;
+    --charcoal: #322C2C;
+    --charcoal-light: #4A4343;
+    --white: #FFFFFF;
+    --bg: #F5F5F0;
+    --border: #E5E5E5;
+    --text-muted: #6B6B6B;
+    --error: #C0392B;
+    --success: #27AE60;
+    --recording: #E74C3C;
+    --matan-bg: #D5B56E;
+    --claude-bg: #FFFFFF;
+  }
+
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--charcoal);
+    height: 100vh;
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--charcoal);
+    padding: 12px 20px;
+    text-align: center;
+    flex-shrink: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  header h1 span { color: var(--gold); }
+
+  /* ── Chat Messages ── */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .msg {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    word-wrap: break-word;
+    position: relative;
+  }
+
+  .msg.matan {
+    align-self: flex-end;
+    background: var(--charcoal);
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg.claude {
+    align-self: flex-start;
+    background: var(--white);
+    color: var(--charcoal);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .msg.system {
+    align-self: center;
+    background: var(--gold-light);
+    color: var(--charcoal);
+    font-size: 0.78rem;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-weight: 500;
+    max-width: 90%;
+  }
+
+  .msg-meta {
+    font-size: 0.65rem;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+  .msg.matan .msg-meta { text-align: right; color: var(--gold-light); }
+  .msg.claude .msg-meta { text-align: left; color: var(--text-muted); }
+
+  .msg-agent {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    color: var(--gold);
+  }
+
+  .msg.claude .read-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 6px; padding: 4px 10px; border: 1.5px solid var(--gold);
+    border-radius: 14px; background: none; color: var(--charcoal);
+    font-size: 0.72rem; font-weight: 600; cursor: pointer;
+    -webkit-appearance: none; touch-action: manipulation;
+  }
+  .msg.claude .read-btn.speaking { background: var(--gold); }
+  .msg.claude .read-btn svg { width: 13px; height: 13px; fill: currentColor; }
+
+  /* Pending indicator */
+  .msg.pending::after {
+    content: ''; display: inline-block; width: 8px; height: 8px;
+    border: 2px solid var(--gold-light); border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ── Input Bar ── */
+  .input-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .input-bar select {
+    width: 70px;
+    padding: 9px 4px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    background: var(--bg);
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .input-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .input-wrap textarea {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 9px 42px 9px 14px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.92rem;
+    color: var(--charcoal);
+    background: var(--bg);
+    resize: none;
+    max-height: 100px;
+    line-height: 1.4;
+    -webkit-appearance: none;
+    outline: none;
+    overflow-y: auto;
+  }
+  .input-wrap textarea:focus { border-color: var(--gold); }
+  .input-wrap textarea::placeholder { color: var(--text-muted); }
+
+  .mic-btn {
+    position: absolute;
+    right: 6px;
+    bottom: 5px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    transition: all 0.2s;
+  }
+  .mic-btn svg { width: 16px; height: 16px; fill: var(--white); }
+  .mic-btn.recording { background: var(--recording); animation: pulse-shadow 1.5s ease-in-out infinite; }
+
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .send-btn:active { transform: scale(0.92); }
+  .send-btn:disabled { opacity: 0.35; }
+  .send-btn svg { width: 18px; height: 18px; fill: var(--charcoal); }
+
+  /* ── Lang Toggle (inline) ── */
+  .lang-btn-sm {
+    padding: 9px 8px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    min-width: 34px;
+    text-align: center;
+  }
+  .lang-btn-sm.he { border-color: var(--gold); background: var(--gold-light); }
+
+  @keyframes pulse-shadow { 0%, 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); } 50% { box-shadow: 0 0 0 10px rgba(231,76,60,0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--charcoal); color: var(--white); padding: 10px 18px; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s;
+    max-width: 85%; text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.error { background: var(--error); }
+  .toast.success { background: var(--success); }
+
+  .unsupported {
+    display: none; background: #FDEDEC; border: 2px solid var(--error);
+    border-radius: 8px; padding: 12px; text-align: center; margin: 12px 14px;
+  }
+
+  .spinner {
+    display: inline-block; width: 14px; height: 14px; border: 2px solid transparent;
+    border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+  }
+
+  /* ── Status bar ── */
+  .status-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--success);
+  }
+  .status-dot.polling { animation: pulse-bg 2s ease-in-out infinite; }
+  .status-dot.off { background: var(--text-muted); }
+  @keyframes pulse-bg { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ORCHESTRA <span>London</span></h1>
+</header>
+
+<div class="status-strip">
+  <div class="status-dot polling" id="statusDot"></div>
+  <span id="statusText">Relay active</span>
+</div>
+
+<div class="unsupported" id="unsupported">
+  <p>Speech recognition requires Safari on iOS or Chrome on desktop.</p>
+</div>
+
+<!-- Chat Messages -->
+<div class="chat-area" id="chatArea">
+  <div class="msg system">Chat relay connected. Messages go to the sheet — Claude picks them up from here.</div>
+</div>
+
+<!-- Input Bar -->
+<div class="input-bar">
+  <select id="agentSelect">
+    <option value="General">All</option>
+    <option value="HRAIM">Dee</option>
+    <option value="CFO">CFO</option>
+    <option value="Underwriter">UW</option>
+    <option value="OL Bookkeeper">BK</option>
+    <option value="PS1 PM">PM</option>
+    <option value="Programming Agent">Dev</option>
+    <option value="Legal Counsel">Legal</option>
+    <option value="Technical Director">TD</option>
+    <option value="Gatekeeper">GK</option>
+    <option value="MRM">MRM</option>
+    <option value="BDM">BDM</option>
+    <option value="Sales Manager">Sales</option>
+  </select>
+
+  <div class="input-wrap">
+    <textarea id="msgInput" rows="1" placeholder="Message..."></textarea>
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+      <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+    </button>
+  </div>
+
+  <button class="lang-btn-sm" id="langToggle" onclick="toggleLang()">EN</button>
+
+  <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Config ──
+  var WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbypcDJBRkapCrZMa0sdG4_7vNFyxmzFDnk7TaKKdI6302F3hTvbJcKhzztPrwrhsR1L7g/exec';
+  var API_KEY = 'Matan-Orchestra-046579594-Shekel';
+  var SPREADSHEET_ID = '1tuUWRFMkC2QS2YKyEUrQ0YcDdUpdW3svwzPiCPjx1Qc';
+  var SHEET_NAME = 'Chat Relay';
+  var POLL_INTERVAL = 8000; // 8 seconds
+
+  // ── State ──
+  var recognition = null;
+  var isRecording = false;
+  var currentLang = 'en-GB';
+  var finalTranscript = '';
+  var interimTranscript = '';
+  var lastRowCount = 0;
+  var pollTimer = null;
+  var messages = []; // local mirror of sheet data
+
+  // ── DOM ──
+  var chatArea = document.getElementById('chatArea');
+  var msgInput = document.getElementById('msgInput');
+  var sendBtn = document.getElementById('sendBtn');
+  var micBtn = document.getElementById('micBtn');
+  var agentSelect = document.getElementById('agentSelect');
+  var langToggle = document.getElementById('langToggle');
+  var statusDot = document.getElementById('statusDot');
+  var statusText = document.getElementById('statusText');
+  var toastEl = document.getElementById('toast');
+  var unsupportedEl = document.getElementById('unsupported');
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    unsupportedEl.style.display = 'block';
+    micBtn.style.display = 'none';
+  }
+
+  // ── Auto-resize textarea ──
+  msgInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    sendBtn.disabled = this.value.trim().length === 0;
+
+    // RTL detection
+    if (currentLang === 'he-IL') {
+      this.style.direction = 'rtl';
+      this.style.textAlign = 'right';
+    }
+  });
+
+  // Enter to send (shift+enter for newline)
+  msgInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (this.value.trim().length > 0) sendMessage();
+    }
+  });
+
+  // ── Language Toggle ──
+  window.toggleLang = function() {
+    if (currentLang === 'en-GB') {
+      currentLang = 'he-IL';
+      langToggle.textContent = 'HE';
+      langToggle.classList.add('he');
+      msgInput.style.direction = 'rtl';
+      msgInput.style.textAlign = 'right';
+    } else {
+      currentLang = 'en-GB';
+      langToggle.textContent = 'EN';
+      langToggle.classList.remove('he');
+      msgInput.style.direction = 'ltr';
+      msgInput.style.textAlign = 'left';
+    }
+  };
+
+  // ── Send Message to Sheet ──
+  window.sendMessage = function() {
+    var text = msgInput.value.trim();
+    if (!text) return;
+
+    var agent = agentSelect.value;
+    var now = new Date();
+    var timestamp = now.toLocaleString('en-GB', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+
+    // Add to local chat immediately
+    addChatBubble('Matan', agent, text, timestamp, 'pending');
+
+    // Clear input
+    msgInput.value = '';
+    msgInput.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    // Write to sheet (append — don't clear)
+    var row = [[timestamp, 'Matan', agent, text, 'new', '']];
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'writeSheet',
+        apiKey: API_KEY,
+        spreadsheetId: SPREADSHEET_ID,
+        sheetName: SHEET_NAME,
+        data: row,
+        startCell: 'A' + (lastRowCount + 2), // +2 because row 1 is header, +1 for next row
+        clear: false
+      })
+    })
+    .then(function() {
+      // Mark as sent
+      var pending = chatArea.querySelector('.msg.pending:last-of-type');
+      if (pending) pending.classList.remove('pending');
+      lastRowCount++;
+      showToast('Sent', 'success');
+    })
+    .catch(function() {
+      showToast('Send failed — check connection', 'error');
+    });
+  };
+
+  // ── Add chat bubble ──
+  function addChatBubble(sender, agent, text, time, extraClass) {
+    var div = document.createElement('div');
+    var isMatan = sender === 'Matan';
+    div.className = 'msg ' + (isMatan ? 'matan' : 'claude') + (extraClass ? ' ' + extraClass : '');
+
+    var html = '';
+    if (!isMatan) {
+      html += '<div class="msg-agent">' + escapeHtml(agent || 'Claude') + '</div>';
+    }
+    html += escapeHtml(text);
+    html += '<div class="msg-meta">';
+    if (isMatan) {
+      html += (agent !== 'General' ? '@' + escapeHtml(agent) + ' · ' : '') + (time || '');
+    } else {
+      html += time || '';
+    }
+    html += '</div>';
+
+    // TTS button for Claude responses
+    if (!isMatan && text.length > 0) {
+      html += '<button class="read-btn" onclick="event.stopPropagation();speakText(this)" data-text="' + escapeAttr(text) + '">'
+        + '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>'
+        + 'Listen</button>';
+    }
+
+    div.innerHTML = html;
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  // ── Poll Sheet for Responses ──
+  function pollSheet() {
+    var params = new URLSearchParams({
+      action: 'readSheet',
+      apiKey: API_KEY,
+      spreadsheetId: SPREADSHEET_ID,
+      sheetName: SHEET_NAME
+    });
+
+    fetch(WEBHOOK_URL + '?' + params.toString())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status === 200 && data.data) {
+          var rows = data.data;
+          // Skip header row
+          var dataRows = rows.slice(1);
+          var newCount = dataRows.length;
+
+          if (newCount > lastRowCount) {
+            // Process only new rows
+            for (var i = lastRowCount; i < newCount; i++) {
+              var row = dataRows[i];
+              var sender = (row[1] || '').trim();
+              var agent = (row[2] || '').trim();
+              var message = (row[3] || '').trim();
+              var status = (row[4] || '').trim();
+              var response = (row[5] || '').trim();
+              var time = (row[0] || '').trim();
+
+              // Only add messages we didn't send from this session
+              if (sender !== 'Matan' && message) {
+                addChatBubble(sender, agent, message, time);
+              }
+
+              // Check if there's a response in column F
+              if (response && sender === 'Matan') {
+                // Check if we already displayed this response
+                var responseId = 'resp-' + i;
+                if (!document.getElementById(responseId)) {
+                  addChatBubble('Claude', agent, response, time);
+                  // Mark the bubble with an ID to avoid duplicates
+                  var lastBubble = chatArea.lastElementChild;
+                  if (lastBubble) lastBubble.id = responseId;
+
+                  // Auto-speak new responses if page is visible
+                  if (!document.hidden && response.length < 300) {
+                    autoSpeak(response);
+                  }
+                }
+              }
+            }
+            lastRowCount = newCount;
+          }
+
+          // Also check existing rows for new responses
+          for (var j = 0; j < Math.min(lastRowCount, dataRows.length); j++) {
+            var r = dataRows[j];
+            var resp = (r[5] || '').trim();
+            var rId = 'resp-' + j;
+            if (resp && !document.getElementById(rId)) {
+              var rAgent = (r[2] || '').trim();
+              var rTime = (r[0] || '').trim();
+              addChatBubble('Claude', rAgent, resp, rTime);
+              var lb = chatArea.lastElementChild;
+              if (lb) lb.id = rId;
+
+              if (!document.hidden && resp.length < 300) {
+                autoSpeak(resp);
+              }
+            }
+          }
+
+          statusDot.className = 'status-dot polling';
+          statusText.textContent = 'Relay active · ' + newCount + ' messages';
+        }
+      })
+      .catch(function() {
+        statusDot.className = 'status-dot off';
+        statusText.textContent = 'Connection lost — retrying...';
+      });
+  }
+
+  // ── Start Polling ──
+  function startPolling() {
+    pollSheet(); // Initial fetch
+    pollTimer = setInterval(pollSheet, POLL_INTERVAL);
+  }
+
+  // Pause polling when tab hidden, resume when visible
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    } else {
+      if (!pollTimer) { pollSheet(); pollTimer = setInterval(pollSheet, POLL_INTERVAL); }
+    }
+  });
+
+  // ── Voice Recording ──
+  window.toggleMic = function() {
+    isRecording ? stopMic() : startMic();
+  };
+
+  function startMic() {
+    if (!SpeechRecognition) { showToast('Not supported', 'error'); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function(stream) {
+        stream.getTracks().forEach(function(t) { t.stop(); });
+        initRecognition();
+      })
+      .catch(function() { showToast('Allow microphone in Settings', 'error'); });
+  }
+
+  function initRecognition() {
+    recognition = new SpeechRecognition();
+    recognition.lang = currentLang;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    finalTranscript = msgInput.value;
+
+    recognition.onstart = function() {
+      isRecording = true;
+      micBtn.classList.add('recording');
+      showToast('Listening...', '');
+    };
+
+    recognition.onresult = function(event) {
+      interimTranscript = '';
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) { finalTranscript += event.results[i][0].transcript + ' '; }
+        else { interimTranscript += event.results[i][0].transcript; }
+      }
+      msgInput.value = finalTranscript + interimTranscript;
+      msgInput.style.height = 'auto';
+      msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
+      sendBtn.disabled = msgInput.value.trim().length === 0;
+    };
+
+    recognition.onerror = function(event) {
+      if (event.error !== 'no-speech') showToast('Mic error: ' + event.error, 'error');
+    };
+
+    recognition.onend = function() {
+      if (isRecording) { try { recognition.start(); } catch(e) { cleanMic(); } return; }
+      cleanMic();
+    };
+
+    try { recognition.start(); } catch(e) { showToast('Mic failed', 'error'); }
+  }
+
+  function stopMic() {
+    isRecording = false;
+    if (recognition) recognition.stop();
+    cleanMic();
+  }
+
+  function cleanMic() {
+    isRecording = false;
+    micBtn.classList.remove('recording');
+    msgInput.value = (finalTranscript + interimTranscript).trim();
+    interimTranscript = '';
+    finalTranscript = '';
+    sendBtn.disabled = msgInput.value.trim().length === 0;
+  }
+
+  // ── Text-to-Speech ──
+  window.speakText = function(btn) {
+    var text = btn.getAttribute('data-text');
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      return;
+    }
+    var utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-GB';
+    utter.rate = 1.0;
+    btn.classList.add('speaking');
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
+    utter.onend = function() {
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+    };
+    window.speechSynthesis.speak(utter);
+  };
+
+  function autoSpeak(text) {
+    if (window.speechSynthesis.speaking) return;
+    var utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-GB';
+    utter.rate = 1.0;
+    window.speechSynthesis.speak(utter);
+  }
+
+  // ── Helpers ──
+  function showToast(msg, type) {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast ' + (type || '') + ' show';
+    setTimeout(function() { toastEl.className = 'toast'; }, 2500);
+  }
+
+  function escapeHtml(t) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(t || ''));
+    return d.innerHTML;
+  }
+
+  function escapeAttr(t) {
+    return (t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ── Init ──
+  startPolling();
+
+})();
+</script>
+
+</body>
+</html>
