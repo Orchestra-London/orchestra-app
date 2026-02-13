@@ -25,8 +25,6 @@
     --error: #C0392B;
     --success: #27AE60;
     --recording: #E74C3C;
-    --matan-bg: #D5B56E;
-    --claude-bg: #FFFFFF;
   }
 
   html { font-size: 16px; -webkit-text-size-adjust: 100%; }
@@ -46,50 +44,138 @@
   /* ── Header ── */
   header {
     background: var(--charcoal);
-    padding: 12px 20px;
+    padding: 10px 20px;
     text-align: center;
     flex-shrink: 0;
     z-index: 100;
     border-bottom: 3px solid var(--gold);
   }
-
   header h1 {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--white);
     letter-spacing: 1px;
   }
   header h1 span { color: var(--gold); }
 
+  /* ── Tab Bar (bottom) ── */
+  .tab-bar {
+    display: flex;
+    background: var(--charcoal);
+    border-top: 1px solid var(--charcoal-light);
+    flex-shrink: 0;
+    z-index: 100;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex: 0 0 auto;
+    min-width: 58px;
+    padding: 8px 6px 6px;
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .tab-btn.active { color: var(--gold); }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 0 0 2px 2px;
+  }
+  .tab-btn svg { width: 20px; height: 20px; fill: currentColor; }
+  .tab-btn .badge {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: var(--error);
+    color: white;
+    font-size: 0.5rem;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* ── Content area ── */
+  .tab-content {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tab-content.active { display: flex; }
+
+  /* ── Status strip ── */
+  .status-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+  }
+  .status-dot.polling { animation: pulse-bg 2s ease-in-out infinite; }
+  .status-dot.off { background: var(--text-muted); }
+
   /* ── Chat Messages ── */
   .chat-area {
     flex: 1;
     overflow-y: auto;
-    padding: 12px 14px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     -webkit-overflow-scrolling: touch;
   }
 
   .msg {
     max-width: 82%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    font-size: 0.92rem;
-    line-height: 1.45;
+    padding: 9px 12px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.4;
     word-wrap: break-word;
     position: relative;
   }
-
   .msg.matan {
     align-self: flex-end;
     background: var(--charcoal);
     color: var(--white);
     border-bottom-right-radius: 4px;
   }
-
   .msg.claude {
     align-self: flex-start;
     background: var(--white);
@@ -97,70 +183,65 @@
     border-bottom-left-radius: 4px;
     border: 1px solid var(--border);
   }
-
   .msg.system {
     align-self: center;
     background: var(--gold-light);
     color: var(--charcoal);
-    font-size: 0.78rem;
-    padding: 6px 14px;
-    border-radius: 12px;
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 10px;
     font-weight: 500;
     max-width: 90%;
   }
-
   .msg-meta {
-    font-size: 0.65rem;
-    margin-top: 4px;
+    font-size: 0.62rem;
+    margin-top: 3px;
     opacity: 0.6;
   }
   .msg.matan .msg-meta { text-align: right; color: var(--gold-light); }
   .msg.claude .msg-meta { text-align: left; color: var(--text-muted); }
-
   .msg-agent {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     color: var(--gold);
   }
 
   .msg.claude .read-btn {
-    display: inline-flex; align-items: center; gap: 4px;
-    margin-top: 6px; padding: 4px 10px; border: 1.5px solid var(--gold);
-    border-radius: 14px; background: none; color: var(--charcoal);
-    font-size: 0.72rem; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 3px;
+    margin-top: 5px; padding: 3px 8px; border: 1.5px solid var(--gold);
+    border-radius: 12px; background: none; color: var(--charcoal);
+    font-size: 0.68rem; font-weight: 600; cursor: pointer;
     -webkit-appearance: none; touch-action: manipulation;
   }
   .msg.claude .read-btn.speaking { background: var(--gold); }
-  .msg.claude .read-btn svg { width: 13px; height: 13px; fill: currentColor; }
+  .msg.claude .read-btn svg { width: 12px; height: 12px; fill: currentColor; }
 
-  /* Pending indicator */
   .msg.pending::after {
-    content: ''; display: inline-block; width: 8px; height: 8px;
+    content: ''; display: inline-block; width: 7px; height: 7px;
     border: 2px solid var(--gold-light); border-top-color: transparent;
     border-radius: 50%; animation: spin 0.8s linear infinite;
-    margin-left: 6px; vertical-align: middle;
+    margin-left: 5px; vertical-align: middle;
   }
 
   /* ── Input Bar ── */
   .input-bar {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
-    padding: 10px 14px;
+    gap: 6px;
+    padding: 8px 10px;
     background: var(--white);
     border-top: 1px solid var(--border);
     flex-shrink: 0;
   }
-
   .input-bar select {
-    width: 70px;
-    padding: 9px 4px;
+    width: 62px;
+    padding: 8px 3px;
     border: 2px solid var(--border);
     border-radius: 10px;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--charcoal);
     background: var(--bg);
@@ -169,23 +250,18 @@
     text-align: center;
     flex-shrink: 0;
   }
-
-  .input-wrap {
-    flex: 1;
-    position: relative;
-  }
-
+  .input-wrap { flex: 1; position: relative; }
   .input-wrap textarea {
     width: 100%;
     border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 9px 42px 9px 14px;
+    border-radius: 18px;
+    padding: 8px 38px 8px 12px;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     color: var(--charcoal);
     background: var(--bg);
     resize: none;
-    max-height: 100px;
+    max-height: 90px;
     line-height: 1.4;
     -webkit-appearance: none;
     outline: none;
@@ -195,113 +271,142 @@
   .input-wrap textarea::placeholder { color: var(--text-muted); }
 
   .mic-btn {
-    position: absolute;
-    right: 6px;
-    bottom: 5px;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 50%;
-    background: var(--charcoal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-appearance: none;
-    touch-action: manipulation;
-    transition: all 0.2s;
+    position: absolute; right: 5px; bottom: 4px;
+    width: 30px; height: 30px; border: none; border-radius: 50%;
+    background: var(--charcoal); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; -webkit-appearance: none;
+    touch-action: manipulation; transition: all 0.2s;
   }
-  .mic-btn svg { width: 16px; height: 16px; fill: var(--white); }
+  .mic-btn svg { width: 14px; height: 14px; fill: var(--white); }
   .mic-btn.recording { background: var(--recording); animation: pulse-shadow 1.5s ease-in-out infinite; }
 
-  .send-btn {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-appearance: none;
-    touch-action: manipulation;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .send-btn:active { transform: scale(0.92); }
-  .send-btn:disabled { opacity: 0.35; }
-  .send-btn svg { width: 18px; height: 18px; fill: var(--charcoal); }
-
-  /* ── Lang Toggle (inline) ── */
   .lang-btn-sm {
-    padding: 9px 8px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--charcoal);
-    cursor: pointer;
-    flex-shrink: 0;
-    -webkit-appearance: none;
-    touch-action: manipulation;
-    min-width: 34px;
-    text-align: center;
+    padding: 8px 6px; border: 2px solid var(--border); border-radius: 10px;
+    background: var(--bg); font-size: 0.72rem; font-weight: 600;
+    color: var(--charcoal); cursor: pointer; flex-shrink: 0;
+    -webkit-appearance: none; touch-action: manipulation;
+    min-width: 32px; text-align: center;
   }
   .lang-btn-sm.he { border-color: var(--gold); background: var(--gold-light); }
 
-  @keyframes pulse-shadow { 0%, 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); } 50% { box-shadow: 0 0 0 10px rgba(231,76,60,0); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .send-btn {
+    width: 36px; height: 36px; border: none; border-radius: 50%;
+    background: var(--gold); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; -webkit-appearance: none;
+    touch-action: manipulation; flex-shrink: 0; transition: all 0.15s;
+  }
+  .send-btn:active { transform: scale(0.92); }
+  .send-btn:disabled { opacity: 0.35; }
+  .send-btn svg { width: 16px; height: 16px; fill: var(--charcoal); }
+
+  /* ── Dashboard cards ── */
+  .dash-section {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    flex-shrink: 0;
+    max-height: 45vh;
+    overflow-y: auto;
+  }
+  .dash-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+  }
+  .dash-card {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .dash-card h3 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+  .dash-card p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .dash-card .metric {
+    display: inline-block;
+    background: var(--charcoal);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin: 2px 2px 2px 0;
+  }
+  .dash-empty {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px;
+    font-style: italic;
+  }
+
+  /* ── Links tab ── */
+  .links-list { padding: 10px 12px; overflow-y: auto; flex: 1; }
+  .link-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold-dark);
+    margin: 12px 0 6px;
+  }
+  .link-category:first-child { margin-top: 0; }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--white);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--charcoal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .link-item:active { background: var(--gold-light); }
+  .link-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--charcoal); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .link-icon svg { width: 16px; height: 16px; fill: var(--gold); }
+  .link-name { font-size: 0.82rem; font-weight: 600; }
 
   /* ── Toast ── */
   .toast {
-    position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: var(--charcoal); color: var(--white); padding: 10px 18px; border-radius: 8px;
-    font-size: 0.82rem; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s;
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--charcoal); color: var(--white); padding: 8px 16px; border-radius: 8px;
+    font-size: 0.78rem; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s;
     max-width: 85%; text-align: center;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .toast.error { background: var(--error); }
   .toast.success { background: var(--success); }
 
-  .unsupported {
-    display: none; background: #FDEDEC; border: 2px solid var(--error);
-    border-radius: 8px; padding: 12px; text-align: center; margin: 12px 14px;
-  }
-
-  .spinner {
-    display: inline-block; width: 14px; height: 14px; border: 2px solid transparent;
-    border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite;
-    vertical-align: middle;
-  }
-
-  /* ── Status bar ── */
-  .status-strip {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    font-size: 0.68rem;
-    color: var(--text-muted);
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .status-dot {
-    width: 7px; height: 7px; border-radius: 50%; background: var(--success);
-  }
-  .status-dot.polling { animation: pulse-bg 2s ease-in-out infinite; }
-  .status-dot.off { background: var(--text-muted); }
-  @keyframes pulse-bg { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes pulse-shadow { 0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,0.4);}50%{box-shadow:0 0 0 10px rgba(231,76,60,0);} }
+  @keyframes spin { to{transform:rotate(360deg);} }
+  @keyframes pulse-bg { 0%,100%{opacity:1;}50%{opacity:0.4;} }
 </style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-    <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+    <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
       <rect x="12" y="47" width="19" height="19" rx="2" fill="#D5B56E"/>
       <rect x="12" y="21" width="19" height="19" rx="2" fill="#D5B56E"/>
@@ -321,46 +426,194 @@
   <span id="statusText">Relay active</span>
 </div>
 
-<div class="unsupported" id="unsupported">
-  <p>Speech recognition requires Safari on iOS or Chrome on desktop.</p>
-</div>
+<!-- ══════════ TAB CONTENTS ══════════ -->
 
-<!-- Chat Messages -->
-<div class="chat-area" id="chatArea">
-  <div class="msg system">Chat relay connected. Messages go to the sheet — Claude picks them up from here.</div>
-</div>
-
-<!-- Input Bar -->
-<div class="input-bar">
-  <select id="agentSelect">
-    <option value="General">All</option>
-    <option value="HRAIM">Dee</option>
-    <option value="CFO">CFO</option>
-    <option value="Underwriter">UW</option>
-    <option value="OL Bookkeeper">BK</option>
-    <option value="PS1 PM">PM</option>
-    <option value="Programming Agent">Dev</option>
-    <option value="Legal Counsel">Legal</option>
-    <option value="Technical Director">TD</option>
-    <option value="Gatekeeper">GK</option>
-    <option value="MRM">MRM</option>
-    <option value="BDM">BDM</option>
-    <option value="Sales Manager">Sales</option>
-  </select>
-
-  <div class="input-wrap">
-    <textarea id="msgInput" rows="1" placeholder="Message..."></textarea>
-    <button class="mic-btn" id="micBtn" onclick="toggleMic()">
-      <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+<!-- GENERAL TAB -->
+<div class="tab-content active" id="tab-general">
+  <div class="chat-area" id="chat-general">
+    <div class="msg system">General channel. Messages route to the selected agent.</div>
+  </div>
+  <div class="input-bar">
+    <select id="agentSelect-general">
+      <option value="General">All</option>
+      <option value="HRAIM">Dee</option>
+      <option value="CFO">CFO</option>
+      <option value="PS1 PM">PM</option>
+      <option value="Underwriter">UW</option>
+      <option value="Programming Agent">Dev</option>
+      <option value="OL Bookkeeper">BK</option>
+      <option value="Legal Counsel">Legal</option>
+      <option value="Technical Director">TD</option>
+      <option value="Gatekeeper">GK</option>
+      <option value="MRM">MRM</option>
+      <option value="BDM">BDM</option>
+      <option value="Sales Manager">Sales</option>
+    </select>
+    <div class="input-wrap">
+      <textarea id="msgInput-general" rows="1" placeholder="Message..."></textarea>
+      <button class="mic-btn" id="micBtn-general" onclick="toggleMic('general')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="lang-btn-sm" id="langToggle" onclick="toggleLang()">EN</button>
+    <button class="send-btn" id="sendBtn-general" onclick="sendMsg('general')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
     </button>
   </div>
-
-  <button class="lang-btn-sm" id="langToggle" onclick="toggleLang()">EN</button>
-
-  <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
-    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-  </button>
 </div>
+
+<!-- DEE (HRAIM) TAB -->
+<div class="tab-content" id="tab-dee">
+  <div class="chat-area" id="chat-dee">
+    <div class="msg system">Dee — Head of Research, Analysis & Intelligence</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-dee" rows="1" placeholder="Message Dee..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('dee')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-dee" onclick="sendMsg('dee')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- CFO TAB -->
+<div class="tab-content" id="tab-cfo">
+  <div class="dash-section" id="cfo-dashboard">
+    <div class="dash-title">CFO Summary</div>
+    <div class="dash-empty" id="cfo-dash-content">No report yet. Claude will push summaries here.</div>
+  </div>
+  <div class="chat-area" id="chat-cfo">
+    <div class="msg system">CFO — Chief Financial Officer</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-cfo" rows="1" placeholder="Message CFO..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('cfo')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-cfo" onclick="sendMsg('cfo')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- PS1 PM TAB -->
+<div class="tab-content" id="tab-pm">
+  <div class="dash-section" id="pm-dashboard">
+    <div class="dash-title">1 Princes Street</div>
+    <div id="pm-dash-content">
+      <div class="dash-card">
+        <h3>1 Princes Street, Richmond</h3>
+        <p>SPV: OPS Richmond Ltd (16587809)</p>
+        <span class="metric">OPERATIONS</span>
+        <span class="metric">6 flats + parking</span>
+        <p style="margin-top:6px">Income: &pound;14,462 pcm / &pound;173,550 pa</p>
+        <p>Mortgage: Investec ~&pound;115k pa @ 5.75%</p>
+        <p>Completed: 6 Oct 2025</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-area" id="chat-pm">
+    <div class="msg system">PS1 PM — 1 Princes Street Property Manager</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-pm" rows="1" placeholder="Message PM..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('pm')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-pm" onclick="sendMsg('pm')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- UNDERWRITER TAB -->
+<div class="tab-content" id="tab-uw">
+  <div class="chat-area" id="chat-uw">
+    <div class="msg system">Underwriter — Deal Analysis & Modelling</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-uw" rows="1" placeholder="Message UW..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('uw')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-uw" onclick="sendMsg('uw')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- DEV TAB -->
+<div class="tab-content" id="tab-dev">
+  <div class="chat-area" id="chat-dev">
+    <div class="msg system">Dev — Programming Agent</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-dev" rows="1" placeholder="Message Dev..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('dev')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-dev" onclick="sendMsg('dev')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- LINKS TAB -->
+<div class="tab-content" id="tab-links">
+  <div class="links-list" id="links-container">
+    <div class="dash-empty">Loading links...</div>
+  </div>
+</div>
+
+<!-- ══════════ BOTTOM TAB BAR ══════════ -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('general')" id="tbtn-general">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    General
+    <span class="badge" id="badge-general"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('dee')" id="tbtn-dee">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    Dee
+    <span class="badge" id="badge-dee"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('cfo')" id="tbtn-cfo">
+    <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+    CFO
+    <span class="badge" id="badge-cfo"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('pm')" id="tbtn-pm">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    1PS
+    <span class="badge" id="badge-pm"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('uw')" id="tbtn-uw">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    UW
+    <span class="badge" id="badge-uw"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('dev')" id="tbtn-dev">
+    <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+    Dev
+    <span class="badge" id="badge-dev"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('links')" id="tbtn-links">
+    <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+    Links
+  </button>
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -373,378 +626,544 @@
   var API_KEY = 'Matan-Orchestra-046579594-Shekel';
   var SPREADSHEET_ID = '1tuUWRFMkC2QS2YKyEUrQ0YcDdUpdW3svwzPiCPjx1Qc';
   var SHEET_NAME = 'Chat Relay';
-  var POLL_INTERVAL = 8000; // 8 seconds
+  var BASE_URL = 'https://orchestra-london.github.io/orchestra-app/';
+  var POLL_INTERVAL = 8000;
+
+  // ElevenLabs (set API key to enable)
+  var ELEVEN_API_KEY = '';
+  var ELEVEN_VOICE_ID = 'pNInz6obpgDQGcFmaJgB'; // Adam - natural male voice
+
+  // ── Agent tab mapping ──
+  var AGENT_TABS = {
+    'HRAIM': 'dee',
+    'CFO': 'cfo',
+    'PS1 PM': 'pm',
+    'Underwriter': 'uw',
+    'Programming Agent': 'dev'
+  };
+  var TAB_AGENTS = {
+    'dee': 'HRAIM',
+    'cfo': 'CFO',
+    'pm': 'PS1 PM',
+    'uw': 'Underwriter',
+    'dev': 'Programming Agent'
+  };
 
   // ── State ──
-  var recognition = null;
-  var isRecording = false;
+  var currentTab = 'general';
   var currentLang = 'en-GB';
-  var finalTranscript = '';
-  var interimTranscript = '';
   var lastRowCount = 0;
   var pollTimer = null;
-  var messages = []; // local mirror of sheet data
+  var isRecording = false;
+  var recognition = null;
+  var finalTranscript = '';
+  var interimTranscript = '';
+  var activeInputTab = 'general';
 
-  // ── DOM ──
-  var chatArea = document.getElementById('chatArea');
-  var msgInput = document.getElementById('msgInput');
-  var sendBtn = document.getElementById('sendBtn');
-  var micBtn = document.getElementById('micBtn');
-  var agentSelect = document.getElementById('agentSelect');
-  var langToggle = document.getElementById('langToggle');
+  // ── DOM refs ──
   var statusDot = document.getElementById('statusDot');
   var statusText = document.getElementById('statusText');
   var toastEl = document.getElementById('toast');
-  var unsupportedEl = document.getElementById('unsupported');
-
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    unsupportedEl.style.display = 'block';
-    micBtn.style.display = 'none';
-  }
 
-  // ── Auto-resize textarea ──
-  msgInput.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-    sendBtn.disabled = this.value.trim().length === 0;
+  // ══════════ TAB SWITCHING ══════════
+  window.switchTab = function(tab) {
+    if (currentTab === tab) return;
+    document.getElementById('tab-' + currentTab).classList.remove('active');
+    document.getElementById('tbtn-' + currentTab).classList.remove('active');
+    currentTab = tab;
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tbtn-' + tab).classList.add('active');
 
-    // RTL detection
-    if (currentLang === 'he-IL') {
-      this.style.direction = 'rtl';
-      this.style.textAlign = 'right';
-    }
-  });
+    // Clear badge
+    var badge = document.getElementById('badge-' + tab);
+    if (badge) { badge.style.display = 'none'; badge.textContent = ''; }
 
-  // Enter to send (shift+enter for newline)
-  msgInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (this.value.trim().length > 0) sendMessage();
-    }
-  });
-
-  // ── Language Toggle ──
-  window.toggleLang = function() {
-    if (currentLang === 'en-GB') {
-      currentLang = 'he-IL';
-      langToggle.textContent = 'HE';
-      langToggle.classList.add('he');
-      msgInput.style.direction = 'rtl';
-      msgInput.style.textAlign = 'right';
-    } else {
-      currentLang = 'en-GB';
-      langToggle.textContent = 'EN';
-      langToggle.classList.remove('he');
-      msgInput.style.direction = 'ltr';
-      msgInput.style.textAlign = 'left';
-    }
+    // Scroll chat to bottom
+    var chatEl = document.getElementById('chat-' + tab);
+    if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
   };
 
-  // ── Send Message to Sheet ──
-  window.sendMessage = function() {
-    var text = msgInput.value.trim();
+  // ══════════ SEND MESSAGE ══════════
+  window.sendMsg = function(tab) {
+    var input = document.getElementById('msgInput-' + tab);
+    var text = input.value.trim();
     if (!text) return;
 
-    var agent = agentSelect.value;
+    // Determine agent
+    var agent;
+    if (tab === 'general') {
+      agent = document.getElementById('agentSelect-general').value;
+    } else {
+      agent = TAB_AGENTS[tab] || 'General';
+    }
+
     var now = new Date();
     var timestamp = now.toLocaleString('en-GB', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
     });
 
-    // Add to local chat immediately
-    addChatBubble('Matan', agent, text, timestamp, 'pending');
+    // Add bubble to current tab
+    addBubble('chat-' + tab, 'Matan', agent, text, timestamp, 'pending');
 
-    // Clear input
-    msgInput.value = '';
-    msgInput.style.height = 'auto';
-    sendBtn.disabled = true;
+    // If sent from General to a specific agent, also add to that agent's tab
+    if (tab === 'general' && agent !== 'General' && AGENT_TABS[agent]) {
+      addBubble('chat-' + AGENT_TABS[agent], 'Matan', agent, text, timestamp, 'pending');
+    }
 
-    // Write to sheet (append — don't clear)
+    // Clear
+    input.value = '';
+    input.style.height = 'auto';
+    var sendBtn = document.getElementById('sendBtn-' + tab);
+    if (sendBtn) sendBtn.disabled = true;
+
+    // Write to sheet
     var row = [[timestamp, 'Matan', agent, text, 'new', '']];
-
     fetch(WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain'},
       body: JSON.stringify({
-        action: 'writeSheet',
-        apiKey: API_KEY,
-        spreadsheetId: SPREADSHEET_ID,
-        sheetName: SHEET_NAME,
-        data: row,
-        startCell: 'A' + (lastRowCount + 2), // +2 because row 1 is header, +1 for next row
-        clear: false
+        action: 'writeSheet', apiKey: API_KEY,
+        spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME,
+        data: row, startCell: 'A' + (lastRowCount + 2), clear: false
       })
-    })
-    .then(function() {
-      // Mark as sent
-      var pending = chatArea.querySelector('.msg.pending:last-of-type');
-      if (pending) pending.classList.remove('pending');
+    }).then(function() {
+      // Remove pending spinners
+      removePending('chat-' + tab);
+      if (tab === 'general' && agent !== 'General' && AGENT_TABS[agent]) {
+        removePending('chat-' + AGENT_TABS[agent]);
+      }
       lastRowCount++;
       showToast('Sent', 'success');
-    })
-    .catch(function() {
-      showToast('Send failed — check connection', 'error');
+    }).catch(function() {
+      showToast('Send failed', 'error');
     });
   };
 
-  // ── Add chat bubble ──
-  function addChatBubble(sender, agent, text, time, extraClass) {
+  function removePending(chatId) {
+    var el = document.getElementById(chatId);
+    if (!el) return;
+    var pending = el.querySelectorAll('.msg.pending');
+    for (var i = 0; i < pending.length; i++) pending[i].classList.remove('pending');
+  }
+
+  // ══════════ CHAT BUBBLES ══════════
+  function addBubble(chatId, sender, agent, text, time, extraClass) {
+    var chatEl = document.getElementById(chatId);
+    if (!chatEl) return;
     var div = document.createElement('div');
     var isMatan = sender === 'Matan';
     div.className = 'msg ' + (isMatan ? 'matan' : 'claude') + (extraClass ? ' ' + extraClass : '');
 
     var html = '';
     if (!isMatan) {
-      html += '<div class="msg-agent">' + escapeHtml(agent || 'Claude') + '</div>';
+      html += '<div class="msg-agent">' + esc(agent || 'Claude') + '</div>';
     }
-    html += escapeHtml(text);
+    html += esc(text);
     html += '<div class="msg-meta">';
     if (isMatan) {
-      html += (agent !== 'General' ? '@' + escapeHtml(agent) + ' · ' : '') + (time || '');
+      html += (agent !== 'General' ? '@' + esc(agent) + ' · ' : '') + (time || '');
     } else {
       html += time || '';
     }
     html += '</div>';
 
-    // TTS button for Claude responses
     if (!isMatan && text.length > 0) {
-      html += '<button class="read-btn" onclick="event.stopPropagation();speakText(this)" data-text="' + escapeAttr(text) + '">'
+      html += '<button class="read-btn" onclick="event.stopPropagation();speakText(this)" data-text="' + escA(text) + '">'
         + '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>'
         + 'Listen</button>';
     }
 
     div.innerHTML = html;
-    chatArea.appendChild(div);
-    chatArea.scrollTop = chatArea.scrollHeight;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
   }
 
-  // ── Poll for Responses ──
-  // Read chat data from a JSON file on GitHub Pages (updated by the daemon)
-  var DATA_URL = 'https://orchestra-london.github.io/orchestra-app/chat-data.json';
-
-  function pollSheet() {
-    fetch(DATA_URL + '?t=' + Date.now())  // cache-bust
+  // ══════════ POLL CHAT DATA ══════════
+  function pollChat() {
+    fetch(BASE_URL + 'chat-data.json?t=' + Date.now())
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        if (data.status === 200 && data.data) {
-          var rows = data.data;
-          // Skip header row
-          var dataRows = rows.slice(1);
-          var newCount = dataRows.length;
+        if (data.status !== 200 || !data.data) return;
+        var rows = data.data;
+        var dataRows = rows.slice(1);
+        var newCount = dataRows.length;
 
-          if (newCount > lastRowCount) {
-            // Process only new rows
-            for (var i = lastRowCount; i < newCount; i++) {
-              var row = dataRows[i];
-              var sender = (row[1] || '').trim();
-              var agent = (row[2] || '').trim();
-              var message = (row[3] || '').trim();
-              var status = (row[4] || '').trim();
-              var response = (row[5] || '').trim();
-              var time = (row[0] || '').trim();
-
-              // Only add messages we didn't send from this session
-              if (sender !== 'Matan' && message) {
-                addChatBubble(sender, agent, message, time);
-              }
-
-              // Check if there's a response in column F
-              if (response && sender === 'Matan') {
-                // Check if we already displayed this response
-                var responseId = 'resp-' + i;
-                if (!document.getElementById(responseId)) {
-                  addChatBubble('Claude', agent, response, time);
-                  // Mark the bubble with an ID to avoid duplicates
-                  var lastBubble = chatArea.lastElementChild;
-                  if (lastBubble) lastBubble.id = responseId;
-
-                  // Auto-speak new responses if page is visible
-                  if (!document.hidden && response.length < 300) {
-                    autoSpeak(response);
-                  }
-                }
-              }
-            }
-            lastRowCount = newCount;
+        if (newCount > lastRowCount) {
+          for (var i = lastRowCount; i < newCount; i++) {
+            processRow(i, dataRows[i]);
           }
-
-          // Also check existing rows for new responses
-          for (var j = 0; j < Math.min(lastRowCount, dataRows.length); j++) {
-            var r = dataRows[j];
-            var resp = (r[5] || '').trim();
-            var rId = 'resp-' + j;
-            if (resp && !document.getElementById(rId)) {
-              var rAgent = (r[2] || '').trim();
-              var rTime = (r[0] || '').trim();
-              addChatBubble('Claude', rAgent, resp, rTime);
-              var lb = chatArea.lastElementChild;
-              if (lb) lb.id = rId;
-
-              if (!document.hidden && resp.length < 300) {
-                autoSpeak(resp);
-              }
-            }
-          }
-
-          statusDot.className = 'status-dot polling';
-          statusText.textContent = 'Relay active · ' + newCount + ' messages';
+          lastRowCount = newCount;
         }
+
+        // Check existing rows for new responses
+        for (var j = 0; j < Math.min(lastRowCount, dataRows.length); j++) {
+          checkResponse(j, dataRows[j]);
+        }
+
+        statusDot.className = 'status-dot polling';
+        statusText.textContent = 'Relay active · ' + newCount + ' messages';
       })
       .catch(function() {
         statusDot.className = 'status-dot off';
-        statusText.textContent = 'Connection lost — retrying...';
+        statusText.textContent = 'Reconnecting...';
       });
   }
 
-  // ── Start Polling ──
-  function startPolling() {
-    pollSheet(); // Initial fetch
-    pollTimer = setInterval(pollSheet, POLL_INTERVAL);
+  function processRow(idx, row) {
+    if (!row || row.length < 5) return;
+    var sender = (row[1] || '').trim();
+    var agent = (row[2] || '').trim();
+    var message = (row[3] || '').trim();
+    var response = (row[5] || '').trim();
+    var time = (row[0] || '').trim();
+
+    if (sender !== 'Matan' && message) {
+      addBubble('chat-general', sender, agent, message, time);
+      // Also add to agent tab if exists
+      var agentTab = AGENT_TABS[agent];
+      if (agentTab) addBubble('chat-' + agentTab, sender, agent, message, time);
+    }
+
+    if (response && sender === 'Matan') {
+      showResponse(idx, agent, response, time);
+    }
   }
 
-  // Pause polling when tab hidden, resume when visible
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-    } else {
-      if (!pollTimer) { pollSheet(); pollTimer = setInterval(pollSheet, POLL_INTERVAL); }
+  function checkResponse(idx, row) {
+    if (!row || row.length < 6) return;
+    var resp = (row[5] || '').trim();
+    if (!resp) return;
+    var sender = (row[1] || '').trim();
+    if (sender !== 'Matan') return;
+    showResponse(idx, (row[2] || '').trim(), resp, (row[0] || '').trim());
+  }
+
+  function showResponse(idx, agent, resp, time) {
+    var respId = 'resp-' + idx;
+    if (document.getElementById(respId)) return;
+
+    // Add to general
+    addBubble('chat-general', 'Claude', agent, resp, time);
+    var lastGeneral = document.getElementById('chat-general').lastElementChild;
+    if (lastGeneral) lastGeneral.id = respId;
+
+    // Add to agent tab
+    var agentTab = AGENT_TABS[agent];
+    if (agentTab) {
+      addBubble('chat-' + agentTab, 'Claude', agent, resp, time);
+      var lastAgent = document.getElementById('chat-' + agentTab).lastElementChild;
+      if (lastAgent) lastAgent.id = respId + '-agent';
+
+      // Show badge if not on that tab
+      if (currentTab !== agentTab) {
+        var badge = document.getElementById('badge-' + agentTab);
+        if (badge) {
+          var count = parseInt(badge.textContent || '0') + 1;
+          badge.textContent = count;
+          badge.style.display = 'flex';
+        }
+      }
     }
+
+    // Badge for general if not on general
+    if (currentTab !== 'general') {
+      var gBadge = document.getElementById('badge-general');
+      if (gBadge) {
+        var gc = parseInt(gBadge.textContent || '0') + 1;
+        gBadge.textContent = gc;
+        gBadge.style.display = 'flex';
+      }
+    }
+
+    // Auto-speak
+    if (!document.hidden && resp.length < 300) {
+      autoSpeak(resp);
+    }
+  }
+
+  // ══════════ POLL LINKS ══════════
+  function pollLinks() {
+    fetch(BASE_URL + 'links-data.json?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status !== 200 || !data.data) return;
+        renderLinks(data.data);
+      })
+      .catch(function() {
+        // Links might not exist yet, show fallback
+        renderFallbackLinks();
+      });
+  }
+
+  function renderLinks(rows) {
+    var container = document.getElementById('links-container');
+    if (!rows || rows.length <= 1) { renderFallbackLinks(); return; }
+    var html = '';
+    var currentCat = '';
+    for (var i = 1; i < rows.length; i++) {
+      var cat = (rows[i][0] || '').trim();
+      var name = (rows[i][1] || '').trim();
+      var url = (rows[i][2] || '').trim();
+      var icon = (rows[i][3] || 'folder').trim();
+      if (!name || !url) continue;
+
+      if (cat !== currentCat) {
+        currentCat = cat;
+        html += '<div class="link-category">' + esc(cat) + '</div>';
+      }
+
+      var iconSvg = icon === 'sheet'
+        ? '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 2v3H5V5h14zm-7 5h7v4h-7v-4zM5 10h5v4H5v-4zm0 9v-3h5v3H5zm7 0v-3h7v3h-7z"/></svg>'
+        : icon === 'email'
+        ? '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>'
+        : '<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+
+      html += '<a class="link-item" href="' + escA(url) + '" target="_blank" rel="noopener">'
+        + '<div class="link-icon">' + iconSvg + '</div>'
+        + '<span class="link-name">' + esc(name) + '</span>'
+        + '</a>';
+    }
+    container.innerHTML = html || '<div class="dash-empty">No links found.</div>';
+  }
+
+  function renderFallbackLinks() {
+    var links = [
+      ['Operations', 'PS1 Master Dashboard', 'https://docs.google.com/spreadsheets/d/1tuUWRFMkC2QS2YKyEUrQ0YcDdUpdW3svwzPiCPjx1Qc', 'sheet'],
+      ['Operations', 'Orchestra Email Log', 'https://docs.google.com/spreadsheets/d/1hmWgXxfQOQG5tAmVd-JoFyPK8nVg5DzEJTAbSlf_mHc', 'email'],
+      ['Drive', 'Orchestra AI Shared Drive', 'https://drive.google.com/drive/folders/0ADUtBkyeVn1TUk9PVA', 'folder'],
+      ['Drive', 'PS1 Bookkeeper Folder', 'https://drive.google.com/drive/folders/1jnckkYCtlQJ_PWEBjEqdTdhUqm2FberB', 'folder'],
+      ['Drive', 'PS1 Invoices', 'https://drive.google.com/drive/folders/1NWYN-Py3OPlIA74Q6aE5QHjMXwaLxKzo', 'folder'],
+      ['Deals', 'George Street Deal Folder', 'https://drive.google.com/drive/folders/12BE2zuRrMLs2F8rBi4F02QmIksE1Tza2', 'folder'],
+      ['Deals', 'Ashley House Model', 'https://docs.google.com/spreadsheets/d/1Qzn4bGsYBWEO3miJ19Iq7Zu6v4Y2VSzHQ33HwEBLvI4', 'sheet'],
+    ];
+    renderLinks([['Category','Name','URL','Icon']].concat(links.map(function(l){ return l; })));
+  }
+
+  // ══════════ POLL CFO REPORT ══════════
+  function pollCFO() {
+    fetch(BASE_URL + 'cfo-report.json?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data || !data.report) return;
+        var el = document.getElementById('cfo-dash-content');
+        var html = '';
+        if (data.report.title) {
+          html += '<div class="dash-card"><h3>' + esc(data.report.title) + '</h3>';
+          if (data.report.date) html += '<p>' + esc(data.report.date) + '</p>';
+          if (data.report.sections) {
+            for (var s = 0; s < data.report.sections.length; s++) {
+              var sec = data.report.sections[s];
+              html += '<p style="margin-top:6px;font-weight:600;">' + esc(sec.heading) + '</p>';
+              if (sec.items) {
+                for (var it = 0; it < sec.items.length; it++) {
+                  html += '<p>· ' + esc(sec.items[it]) + '</p>';
+                }
+              }
+            }
+          }
+          html += '</div>';
+        }
+        el.innerHTML = html || '<div class="dash-empty">No report yet.</div>';
+      })
+      .catch(function() { /* no report yet, leave placeholder */ });
+  }
+
+  // ══════════ INPUT HANDLERS ══════════
+  var allTabs = ['general','dee','cfo','pm','uw','dev'];
+  allTabs.forEach(function(tab) {
+    var input = document.getElementById('msgInput-' + tab);
+    var btn = document.getElementById('sendBtn-' + tab);
+    if (!input || !btn) return;
+
+    input.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 90) + 'px';
+      btn.disabled = this.value.trim().length === 0;
+      if (currentLang === 'he-IL') {
+        this.style.direction = 'rtl';
+        this.style.textAlign = 'right';
+      }
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (this.value.trim().length > 0) sendMsg(tab);
+      }
+    });
   });
 
-  // ── Voice Recording ──
-  window.toggleMic = function() {
-    isRecording ? stopMic() : startMic();
+  // ══════════ LANGUAGE ══════════
+  window.toggleLang = function() {
+    if (currentLang === 'en-GB') {
+      currentLang = 'he-IL';
+      document.getElementById('langToggle').textContent = 'HE';
+      document.getElementById('langToggle').classList.add('he');
+    } else {
+      currentLang = 'en-GB';
+      document.getElementById('langToggle').textContent = 'EN';
+      document.getElementById('langToggle').classList.remove('he');
+    }
   };
 
-  function startMic() {
+  // ══════════ VOICE RECORDING ══════════
+  window.toggleMic = function(tab) {
+    activeInputTab = tab;
+    isRecording ? stopMic() : startMic(tab);
+  };
+
+  function startMic(tab) {
     if (!SpeechRecognition) { showToast('Not supported', 'error'); return; }
-    navigator.mediaDevices.getUserMedia({ audio: true })
+    navigator.mediaDevices.getUserMedia({audio:true})
       .then(function(stream) {
-        stream.getTracks().forEach(function(t) { t.stop(); });
-        initRecognition();
+        stream.getTracks().forEach(function(t){t.stop();});
+        initRecognition(tab);
       })
-      .catch(function() { showToast('Allow microphone in Settings', 'error'); });
+      .catch(function() { showToast('Allow microphone', 'error'); });
   }
 
-  function initRecognition() {
+  function initRecognition(tab) {
     recognition = new SpeechRecognition();
     recognition.lang = currentLang;
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
-    finalTranscript = msgInput.value;
+    var input = document.getElementById('msgInput-' + tab);
+    var micBtn = input ? input.parentElement.querySelector('.mic-btn') : null;
+    finalTranscript = input ? input.value : '';
 
     recognition.onstart = function() {
       isRecording = true;
-      micBtn.classList.add('recording');
+      if (micBtn) micBtn.classList.add('recording');
       showToast('Listening...', '');
     };
-
     recognition.onresult = function(event) {
       interimTranscript = '';
       for (var i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) { finalTranscript += event.results[i][0].transcript + ' '; }
-        else { interimTranscript += event.results[i][0].transcript; }
+        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + ' ';
+        else interimTranscript += event.results[i][0].transcript;
       }
-      msgInput.value = finalTranscript + interimTranscript;
-      msgInput.style.height = 'auto';
-      msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
-      sendBtn.disabled = msgInput.value.trim().length === 0;
+      if (input) {
+        input.value = finalTranscript + interimTranscript;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 90) + 'px';
+        var btn = document.getElementById('sendBtn-' + tab);
+        if (btn) btn.disabled = input.value.trim().length === 0;
+      }
     };
-
     recognition.onerror = function(event) {
       if (event.error !== 'no-speech') showToast('Mic error: ' + event.error, 'error');
     };
-
     recognition.onend = function() {
-      if (isRecording) { try { recognition.start(); } catch(e) { cleanMic(); } return; }
-      cleanMic();
+      if (isRecording) { try { recognition.start(); } catch(e) { cleanMic(tab); } return; }
+      cleanMic(tab);
     };
-
     try { recognition.start(); } catch(e) { showToast('Mic failed', 'error'); }
   }
 
   function stopMic() {
     isRecording = false;
     if (recognition) recognition.stop();
-    cleanMic();
+    cleanMic(activeInputTab);
   }
 
-  function cleanMic() {
+  function cleanMic(tab) {
     isRecording = false;
-    micBtn.classList.remove('recording');
-    msgInput.value = (finalTranscript + interimTranscript).trim();
+    var input = document.getElementById('msgInput-' + tab);
+    var micBtn = input ? input.parentElement.querySelector('.mic-btn') : null;
+    if (micBtn) micBtn.classList.remove('recording');
+    if (input) {
+      input.value = (finalTranscript + interimTranscript).trim();
+      var btn = document.getElementById('sendBtn-' + tab);
+      if (btn) btn.disabled = input.value.trim().length === 0;
+    }
     interimTranscript = '';
     finalTranscript = '';
-    sendBtn.disabled = msgInput.value.trim().length === 0;
   }
 
-  // ── Text-to-Speech (enhanced voice selection) ──
+  // ══════════ TEXT-TO-SPEECH ══════════
   var bestVoice = null;
-
-  // Preferred voices ranked by quality (best first)
-  // iOS Premium/Enhanced voices sound very natural
   var voicePrefs = [
-    'Daniel', 'Samantha', 'Karen', 'Moira', 'Rishi', 'Tessa',
-    'Google UK English Male', 'Google UK English Female',
-    'Microsoft Ryan', 'Microsoft Sonia',
-    'English United Kingdom', 'en-GB', 'en-US'
+    'Daniel','Samantha','Karen','Moira','Rishi','Tessa',
+    'Google UK English Male','Google UK English Female',
+    'Microsoft Ryan','Microsoft Sonia','en-GB','en-US'
   ];
 
   function pickBestVoice() {
     var voices = window.speechSynthesis.getVoices();
     if (!voices.length) return;
-
-    // Try each preferred voice in order
     for (var p = 0; p < voicePrefs.length; p++) {
       var pref = voicePrefs[p].toLowerCase();
       for (var v = 0; v < voices.length; v++) {
         var name = (voices[v].name || '').toLowerCase();
         var lang = (voices[v].lang || '').toLowerCase();
         if (name.indexOf(pref) >= 0 || lang.indexOf(pref) >= 0) {
-          bestVoice = voices[v];
-          return;
+          bestVoice = voices[v]; return;
         }
       }
     }
-
-    // Fallback: any English voice
     for (var i = 0; i < voices.length; i++) {
-      if ((voices[i].lang || '').indexOf('en') === 0) {
-        bestVoice = voices[i];
-        return;
-      }
+      if ((voices[i].lang || '').indexOf('en') === 0) { bestVoice = voices[i]; return; }
     }
   }
 
-  // Voices load async on some browsers
-  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+  if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
     window.speechSynthesis.onvoiceschanged = pickBestVoice;
   }
   pickBestVoice();
 
-  function createUtterance(text) {
+  // ElevenLabs TTS
+  function elevenSpeak(text, btn) {
+    if (!ELEVEN_API_KEY) return false;
+    btn.classList.add('speaking');
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Loading...';
+
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/' + ELEVEN_VOICE_ID, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': ELEVEN_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('ElevenLabs error');
+      return r.blob();
+    })
+    .then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var audio = new Audio(url);
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
+      audio.onended = function() {
+        btn.classList.remove('speaking');
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+        URL.revokeObjectURL(url);
+      };
+      audio.play();
+      // Store ref for stop
+      btn._audio = audio;
+    })
+    .catch(function() {
+      // Fallback to browser TTS
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      browserSpeak(text, btn);
+    });
+    return true;
+  }
+
+  function browserSpeak(text, btn) {
     var utter = new SpeechSynthesisUtterance(text);
     if (bestVoice) utter.voice = bestVoice;
     utter.lang = bestVoice ? bestVoice.lang : 'en-GB';
-    utter.rate = 0.95;   // Slightly slower = more natural
+    utter.rate = 0.95;
     utter.pitch = 1.0;
-    utter.volume = 1.0;
-    return utter;
-  }
-
-  window.speakText = function(btn) {
-    var text = btn.getAttribute('data-text');
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      btn.classList.remove('speaking');
-      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
-      return;
-    }
-    var utter = createUtterance(text);
     btn.classList.add('speaking');
     btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
     utter.onend = function() {
@@ -752,33 +1171,72 @@
       btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
     };
     window.speechSynthesis.speak(utter);
+  }
+
+  window.speakText = function(btn) {
+    var text = btn.getAttribute('data-text');
+    // Check if already playing
+    if (btn._audio && !btn._audio.paused) {
+      btn._audio.pause();
+      btn._audio = null;
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      return;
+    }
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      return;
+    }
+    // Try ElevenLabs first, fallback to browser
+    if (!elevenSpeak(text, btn)) {
+      browserSpeak(text, btn);
+    }
   };
 
   function autoSpeak(text) {
     if (window.speechSynthesis.speaking) return;
-    var utter = createUtterance(text);
+    if (ELEVEN_API_KEY) return; // Don't auto-speak with ElevenLabs (costs chars)
+    var utter = new SpeechSynthesisUtterance(text);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice ? bestVoice.lang : 'en-GB';
+    utter.rate = 0.95;
     window.speechSynthesis.speak(utter);
   }
 
-  // ── Helpers ──
+  // ══════════ HELPERS ══════════
   function showToast(msg, type) {
     toastEl.textContent = msg;
     toastEl.className = 'toast ' + (type || '') + ' show';
     setTimeout(function() { toastEl.className = 'toast'; }, 2500);
   }
 
-  function escapeHtml(t) {
+  function esc(t) {
     var d = document.createElement('div');
     d.appendChild(document.createTextNode(t || ''));
     return d.innerHTML;
   }
 
-  function escapeAttr(t) {
-    return (t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function escA(t) {
+    return (t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ── Init ──
-  startPolling();
+  // ══════════ INIT ══════════
+  pollChat();
+  pollTimer = setInterval(pollChat, POLL_INTERVAL);
+  pollLinks();
+  setInterval(pollLinks, 60000); // refresh links every 60s
+  pollCFO();
+  setInterval(pollCFO, 60000);
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    } else {
+      if (!pollTimer) { pollChat(); pollTimer = setInterval(pollChat, POLL_INTERVAL); }
+    }
+  });
 
 })();
 </script>
