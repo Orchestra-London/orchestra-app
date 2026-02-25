@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Orchestra</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACXklEQVR42u3d4anqUBCF0RSUXxZmdynFfkwBBiJEM3tmwVeAvLOE+050uzzWVfrY4p9AcAgOwSE4BIfgEByCQ3DoZK/t+aPgwKIcETgyZNziAw444MiX8X8fcMABBxxwwAEHHHDAAUfuBSUc3r6HpwIHGYcHAwcccJDx/dnAAQcccMABBxxwwAEHHHDAAQcccMABBxxwwAEHHHD4OAUcl+GY/HEKODwxhwMOOC7E4WzggAMOOOCAAw44Gv5RnDTBAAcccJS4iwubfYLDYBwc958THHDAAQcccMABBxxwwBE3ekQGHHDA4YISDheUcDgnOOCAAw444BAcgkNwCI6RX/mHIxiHz5DCUfHbwnDAAUcgDt94G/q+gQMOOJrOPsFhMM6coalJW5dwwAHHiNtrOLx96w6hwmHrEg444Oj09yAccMABBxydbkjh8GzFT2p4KutXE+CAw7y17XM44IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw5nY4IBDjjgsMwPh2V+OGxdwgEHHHDAAQcccMABBxxwwFF/9IgMOOCAw+01HG6v4XBOcMABBxxwJE0wCA44MnH4nyQcRQfjZGpScAgOwSE4BIfgkOAQHIJDrs+9AA/eav4kz8BHj/GP7L0AOOCw7GMwzmAcHHDAAQcccMABBxxwwAEHHHDAAQccXgAccMABBxxwwAEHHM4GDjjggAMOOOCAAw44vAA44IADDjjggAMOOJwNHHDAAQcccMABBxxwwGGCwQSDfQ44WuGwumT2yV6bwTgJDsEhOASH4BAcgkNwCA7BIe29AdwlOj4bl0kFAAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACXklEQVR42u3d4anqUBCF0RSUXxZmdynFfkwBBiJEM3tmwVeAvLOE+050uzzWVfrY4p9AcAgOwSE4BIfgEByCQ3DoZK/t+aPgwKIcETgyZNziAw444MiX8X8fcMABBxxwwAEHHHDAAUfuBSUc3r6HpwIHGYcHAwcccJDx/dnAAQcccMABBxxwwAEHHHDAAQcccMABBxxwwAEHHHD4OAUcl+GY/HEKODwxhwMOOC7E4WzggAMOOOCAAw44Gv5RnDTBAAcccJS4iwubfYLDYBwc958THHDAAQcccMABBxxwwBE3ekQGHHDA4YISDheUcDgnOOCAAw444BAcgkNwCI6RX/mHIxiHz5DCUfHbwnDAAUcgDt94G/q+gQMOOJrOPsFhMM6coalJW5dwwAHHiNtrOLx96w6hwmHrEg444Oj09yAccMABBxydbkjh8GzFT2p4KutXE+CAw7y17XM44IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw5nY4IBDjjgsMwPh2V+OGxdwgEHHHDAAQcccMABBxxwwFF/9IgMOOCAw+01HG6v4XBOcMABBxxwJE0wCA44MnH4nyQcRQfjZGpScAgOwSE4BIfgkOAQHIJDrs+9AA/eav4kz8BHj/GP7L0AOOCw7GMwzmAcHHDAAQcccMABBxxwwAEHHHDAAQccXgAccMABBxxwwAEHHM4GDjjggAMOOOCAAw44vAA44IADDjjggAMOOJwNHHDAAQcccMABBxxwwGGCwQSDfQ44WuGwumT2yV6bwTgJDsEhOASH4BAcgkNwCA7BIe29AdwlOj4bl0kFAAAAAElFTkSuQmCC">
+<meta name="apple-mobile-web-app-title" content="Orchestra">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #D5B56E;
+    --gold-light: #E8D4A0;
+    --gold-dark: #B89A4E;
+    --charcoal: #322C2C;
+    --charcoal-light: #4A4343;
+    --white: #FFFFFF;
+    --bg: #F5F5F0;
+    --border: #E5E5E5;
+    --text-muted: #6B6B6B;
+    --error: #C0392B;
+    --success: #27AE60;
+    --recording: #E74C3C;
+  }
+
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--charcoal);
+    height: 100vh;
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--charcoal);
+    padding: 10px 20px;
+    text-align: center;
+    flex-shrink: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  header h1 span { color: var(--gold); }
+
+  /* ── Tab Bar (bottom) ── */
+  .tab-bar {
+    display: flex;
+    background: var(--charcoal);
+    border-top: 1px solid var(--charcoal-light);
+    flex-shrink: 0;
+    z-index: 100;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex: 0 0 auto;
+    min-width: 58px;
+    padding: 8px 6px 6px;
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .tab-btn.active { color: var(--gold); }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 0 0 2px 2px;
+  }
+  .tab-btn svg { width: 20px; height: 20px; fill: currentColor; }
+  .tab-btn .badge {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: var(--error);
+    color: white;
+    font-size: 0.5rem;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* ── Content area ── */
+  .tab-content {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tab-content.active { display: flex; }
+
+  /* ── Status strip ── */
+  .status-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+  }
+  .status-dot.polling { animation: pulse-bg 2s ease-in-out infinite; }
+  .status-dot.off { background: var(--text-muted); }
+
+  /* ── Chat Messages ── */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .msg {
+    max-width: 82%;
+    padding: 9px 12px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    position: relative;
+  }
+  .msg.matan {
+    align-self: flex-end;
+    background: var(--charcoal);
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+  }
+  .msg.claude {
+    align-self: flex-start;
+    background: var(--white);
+    color: var(--charcoal);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .msg.system {
+    align-self: center;
+    background: var(--gold-light);
+    color: var(--charcoal);
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-weight: 500;
+    max-width: 90%;
+  }
+  .msg-meta {
+    font-size: 0.62rem;
+    margin-top: 3px;
+    opacity: 0.6;
+  }
+  .msg.matan .msg-meta { text-align: right; color: var(--gold-light); }
+  .msg.claude .msg-meta { text-align: left; color: var(--text-muted); }
+  .msg-agent {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    color: var(--gold);
+  }
+
+  .msg.claude .read-btn {
+    display: inline-flex; align-items: center; gap: 3px;
+    margin-top: 5px; padding: 3px 8px; border: 1.5px solid var(--gold);
+    border-radius: 12px; background: none; color: var(--charcoal);
+    font-size: 0.68rem; font-weight: 600; cursor: pointer;
+    -webkit-appearance: none; touch-action: manipulation;
+  }
+  .msg.claude .read-btn.speaking { background: var(--gold); }
+  .msg.claude .read-btn svg { width: 12px; height: 12px; fill: currentColor; }
+
+  .msg.pending::after {
+    content: ''; display: inline-block; width: 7px; height: 7px;
+    border: 2px solid var(--gold-light); border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin-left: 5px; vertical-align: middle;
+  }
+
+  /* ── Input Bar ── */
+  .input-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .input-bar select {
+    width: 62px;
+    padding: 8px 3px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    background: var(--bg);
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .input-wrap { flex: 1; position: relative; }
+  .input-wrap textarea {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    padding: 8px 38px 8px 12px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.88rem;
+    color: var(--charcoal);
+    background: var(--bg);
+    resize: none;
+    max-height: 90px;
+    line-height: 1.4;
+    -webkit-appearance: none;
+    outline: none;
+    overflow-y: auto;
+  }
+  .input-wrap textarea:focus { border-color: var(--gold); }
+  .input-wrap textarea::placeholder { color: var(--text-muted); }
+
+  .mic-btn {
+    position: absolute; right: 5px; bottom: 4px;
+    width: 30px; height: 30px; border: none; border-radius: 50%;
+    background: var(--charcoal); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; -webkit-appearance: none;
+    touch-action: manipulation; transition: all 0.2s;
+  }
+  .mic-btn svg { width: 14px; height: 14px; fill: var(--white); }
+  .mic-btn.recording { background: var(--recording); animation: pulse-shadow 1.5s ease-in-out infinite; }
+
+  .lang-btn-sm {
+    padding: 8px 6px; border: 2px solid var(--border); border-radius: 10px;
+    background: var(--bg); font-size: 0.72rem; font-weight: 600;
+    color: var(--charcoal); cursor: pointer; flex-shrink: 0;
+    -webkit-appearance: none; touch-action: manipulation;
+    min-width: 32px; text-align: center;
+  }
+  .lang-btn-sm.he { border-color: var(--gold); background: var(--gold-light); }
+
+  .send-btn {
+    width: 36px; height: 36px; border: none; border-radius: 50%;
+    background: var(--gold); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; -webkit-appearance: none;
+    touch-action: manipulation; flex-shrink: 0; transition: all 0.15s;
+  }
+  .send-btn:active { transform: scale(0.92); }
+  .send-btn:disabled { opacity: 0.35; }
+  .send-btn svg { width: 16px; height: 16px; fill: var(--charcoal); }
+
+  /* ── Dashboard cards ── */
+  .dash-section {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    flex-shrink: 0;
+    max-height: 45vh;
+    overflow-y: auto;
+  }
+  .dash-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+  }
+  .dash-card {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .dash-card h3 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+  .dash-card p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .dash-card .metric {
+    display: inline-block;
+    background: var(--charcoal);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin: 2px 2px 2px 0;
+  }
+  .dash-empty {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px;
+    font-style: italic;
+  }
+
+  /* ── Links tab ── */
+  .links-list { padding: 10px 12px; overflow-y: auto; flex: 1; }
+  .link-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold-dark);
+    margin: 12px 0 6px;
+  }
+  .link-category:first-child { margin-top: 0; }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--white);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--charcoal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .link-item:active { background: var(--gold-light); }
+  .link-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--charcoal); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .link-icon svg { width: 16px; height: 16px; fill: var(--gold); }
+  .link-name { font-size: 0.82rem; font-weight: 600; }
+
+  /* ── Notes / Obsidian tab ── */
+  .notes-container { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+  .notes-toolbar {
+    display: flex; align-items: center; gap: 6px; padding: 8px 10px;
+    background: var(--white); border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .notes-toolbar input {
+    flex: 1; border: 2px solid var(--border); border-radius: 18px;
+    padding: 7px 12px; font-size: 0.82rem; background: var(--bg);
+    color: var(--charcoal); outline: none; font-family: inherit;
+  }
+  .notes-toolbar input:focus { border-color: var(--gold); }
+  .notes-toolbar input::placeholder { color: var(--text-muted); }
+  .notes-toolbar button {
+    width: 32px; height: 32px; border: none; border-radius: 50%;
+    background: var(--charcoal); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; flex-shrink: 0;
+    -webkit-appearance: none; touch-action: manipulation;
+  }
+  .notes-toolbar button svg { width: 14px; height: 14px; fill: var(--white); }
+  .notes-toolbar button.active { background: var(--gold); }
+  .notes-toolbar button.active svg { fill: var(--charcoal); }
+
+  .notes-breadcrumb {
+    display: flex; align-items: center; gap: 2px; padding: 6px 12px;
+    font-size: 0.7rem; color: var(--text-muted); background: var(--bg);
+    border-bottom: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap;
+  }
+  .notes-breadcrumb span { cursor: pointer; }
+  .notes-breadcrumb span:hover { color: var(--gold-dark); }
+  .notes-breadcrumb .bc-sep { color: var(--border); margin: 0 1px; cursor: default; }
+  .notes-breadcrumb .bc-current { color: var(--charcoal); font-weight: 600; cursor: default; }
+
+  .notes-list { flex: 1; overflow-y: auto; padding: 6px 10px; -webkit-overflow-scrolling: touch; }
+  .notes-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    background: var(--white); border-radius: 10px; margin-bottom: 5px;
+    border: 1px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .notes-item:active { background: var(--gold-light); }
+  .notes-item-icon {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--charcoal);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .notes-item-icon svg { width: 16px; height: 16px; fill: var(--gold); }
+  .notes-item-icon.folder-icon { background: var(--gold-dark); }
+  .notes-item-icon.folder-icon svg { fill: var(--white); }
+  .notes-item-info { flex: 1; min-width: 0; }
+  .notes-item-name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .notes-item-meta { font-size: 0.65rem; color: var(--text-muted); margin-top: 1px; }
+
+  .note-viewer {
+    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  .note-viewer-header {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    background: var(--white); border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .note-viewer-header .back-btn {
+    width: 28px; height: 28px; border: none; border-radius: 50%;
+    background: var(--bg); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; flex-shrink: 0;
+  }
+  .note-viewer-header .back-btn svg { width: 14px; height: 14px; fill: var(--charcoal); }
+  .note-viewer-title { flex: 1; font-size: 0.85rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note-viewer-actions { display: flex; gap: 4px; }
+  .note-viewer-actions button {
+    padding: 4px 10px; border: 1.5px solid var(--gold); border-radius: 12px;
+    background: none; color: var(--charcoal); font-size: 0.68rem; font-weight: 600;
+    cursor: pointer; -webkit-appearance: none; touch-action: manipulation;
+  }
+  .note-viewer-actions button.active { background: var(--gold); }
+
+  .note-content {
+    flex: 1; overflow-y: auto; padding: 12px 14px; font-size: 0.85rem;
+    line-height: 1.6; -webkit-overflow-scrolling: touch; white-space: pre-wrap;
+    word-wrap: break-word; font-family: inherit;
+  }
+  .note-content.editing {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.82rem; outline: none; background: var(--white);
+    border: none; resize: none; padding: 12px 14px; width: 100%;
+  }
+  .note-content h1 { font-size: 1.2rem; margin: 10px 0 6px; color: var(--charcoal); }
+  .note-content h2 { font-size: 1.05rem; margin: 8px 0 4px; color: var(--charcoal); }
+  .note-content h3 { font-size: 0.95rem; margin: 6px 0 3px; color: var(--charcoal); }
+  .note-content code { background: var(--bg); padding: 1px 4px; border-radius: 3px; font-size: 0.8rem; }
+  .note-content pre { background: var(--charcoal); color: var(--gold-light); padding: 10px; border-radius: 8px; overflow-x: auto; margin: 8px 0; }
+  .note-content pre code { background: none; color: inherit; padding: 0; }
+  .note-content blockquote { border-left: 3px solid var(--gold); padding-left: 10px; color: var(--text-muted); margin: 6px 0; }
+  .note-content a { color: var(--gold-dark); text-decoration: underline; }
+  .note-content ul, .note-content ol { padding-left: 20px; margin: 4px 0; }
+  .note-content li { margin: 2px 0; }
+  .note-content .task-done { text-decoration: line-through; color: var(--text-muted); }
+  .note-content hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+  .note-content img { max-width: 100%; border-radius: 6px; margin: 6px 0; }
+
+  .notes-settings {
+    padding: 14px; overflow-y: auto; flex: 1;
+  }
+  .notes-settings label {
+    display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--gold-dark); margin: 12px 0 4px;
+  }
+  .notes-settings label:first-child { margin-top: 0; }
+  .notes-settings input {
+    width: 100%; border: 2px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; font-size: 0.82rem; background: var(--bg);
+    color: var(--charcoal); outline: none; font-family: inherit;
+  }
+  .notes-settings input:focus { border-color: var(--gold); }
+  .notes-settings .settings-hint {
+    font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; line-height: 1.3;
+  }
+  .notes-settings .connect-btn {
+    display: block; width: 100%; margin-top: 14px; padding: 10px;
+    border: none; border-radius: 10px; background: var(--gold);
+    color: var(--charcoal); font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; -webkit-appearance: none; touch-action: manipulation;
+  }
+  .notes-settings .connect-btn:active { opacity: 0.8; }
+  .notes-settings .disconnect-btn {
+    display: block; width: 100%; margin-top: 8px; padding: 10px;
+    border: 2px solid var(--error); border-radius: 10px; background: none;
+    color: var(--error); font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; -webkit-appearance: none;
+  }
+  .notes-conn-status {
+    display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+    font-size: 0.72rem; background: var(--white); border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .notes-conn-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .notes-conn-dot.connected { background: var(--success); }
+  .notes-conn-dot.disconnected { background: var(--text-muted); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--charcoal); color: var(--white); padding: 8px 16px; border-radius: 8px;
+    font-size: 0.78rem; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s;
+    max-width: 85%; text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.error { background: var(--error); }
+  .toast.success { background: var(--success); }
+
+  @keyframes pulse-shadow { 0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,0.4);}50%{box-shadow:0 0 0 10px rgba(231,76,60,0);} }
+  @keyframes spin { to{transform:rotate(360deg);} }
+  @keyframes pulse-bg { 0%,100%{opacity:1;}50%{opacity:0.4;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+    <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="12" y="47" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="12" y="21" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="43" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="39" y="13" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="73" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="37" width="19" height="19" rx="2" fill="#D5B56E"/>
+      <rect x="66" y="5" width="19" height="19" rx="2" fill="#D5B56E"/>
+    </svg>
+    <h1>ORCHESTRA <span>London</span></h1>
+  </div>
+</header>
+
+<div class="status-strip">
+  <div class="status-dot polling" id="statusDot"></div>
+  <span id="statusText">Relay active</span>
+</div>
+
+<!-- ══════════ TAB CONTENTS ══════════ -->
+
+<!-- GENERAL TAB -->
+<div class="tab-content active" id="tab-general">
+  <div class="chat-area" id="chat-general">
+    <div class="msg system">General channel. Messages route to the selected agent.</div>
+  </div>
+  <div class="input-bar">
+    <select id="agentSelect-general">
+      <option value="General">All</option>
+      <option value="HRAIM">Dee</option>
+      <option value="CFO">CFO</option>
+      <option value="PS1 PM">PM</option>
+      <option value="Underwriter">UW</option>
+      <option value="Programming Agent">Dev</option>
+      <option value="OL Bookkeeper">BK</option>
+      <option value="Legal Counsel">Legal</option>
+      <option value="Technical Director">TD</option>
+      <option value="Gatekeeper">GK</option>
+      <option value="MRM">MRM</option>
+      <option value="BDM">BDM</option>
+      <option value="Sales Manager">Sales</option>
+    </select>
+    <div class="input-wrap">
+      <textarea id="msgInput-general" rows="1" placeholder="Message..."></textarea>
+      <button class="mic-btn" id="micBtn-general" onclick="toggleMic('general')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="lang-btn-sm" id="langToggle" onclick="toggleLang()">EN</button>
+    <button class="send-btn" id="sendBtn-general" onclick="sendMsg('general')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- DEE (HRAIM) TAB -->
+<div class="tab-content" id="tab-dee">
+  <div class="chat-area" id="chat-dee">
+    <div class="msg system">Dee — Head of Research, Analysis & Intelligence</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-dee" rows="1" placeholder="Message Dee..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('dee')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-dee" onclick="sendMsg('dee')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- CFO TAB -->
+<div class="tab-content" id="tab-cfo">
+  <div class="dash-section" id="cfo-dashboard">
+    <div class="dash-title">CFO Summary</div>
+    <div class="dash-empty" id="cfo-dash-content">No report yet. Claude will push summaries here.</div>
+  </div>
+  <div class="chat-area" id="chat-cfo">
+    <div class="msg system">CFO — Chief Financial Officer</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-cfo" rows="1" placeholder="Message CFO..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('cfo')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-cfo" onclick="sendMsg('cfo')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- PS1 PM TAB -->
+<div class="tab-content" id="tab-pm">
+  <div class="dash-section" id="pm-dashboard">
+    <div class="dash-title">1 Princes Street</div>
+    <div id="pm-dash-content">
+      <div class="dash-card">
+        <h3>1 Princes Street, Richmond</h3>
+        <p>SPV: OPS Richmond Ltd (16587809)</p>
+        <span class="metric">OPERATIONS</span>
+        <span class="metric">6 flats + parking</span>
+        <p style="margin-top:6px">Income: &pound;14,462 pcm / &pound;173,550 pa</p>
+        <p>Mortgage: Investec ~&pound;115k pa @ 5.75%</p>
+        <p>Completed: 6 Oct 2025</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-area" id="chat-pm">
+    <div class="msg system">PS1 PM — 1 Princes Street Property Manager</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-pm" rows="1" placeholder="Message PM..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('pm')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-pm" onclick="sendMsg('pm')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- UNDERWRITER TAB -->
+<div class="tab-content" id="tab-uw">
+  <div class="chat-area" id="chat-uw">
+    <div class="msg system">Underwriter — Deal Analysis & Modelling</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-uw" rows="1" placeholder="Message UW..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('uw')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-uw" onclick="sendMsg('uw')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- DEV TAB -->
+<div class="tab-content" id="tab-dev">
+  <div class="chat-area" id="chat-dev">
+    <div class="msg system">Dev — Programming Agent</div>
+  </div>
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msgInput-dev" rows="1" placeholder="Message Dev..."></textarea>
+      <button class="mic-btn" onclick="toggleMic('dev')">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" id="sendBtn-dev" onclick="sendMsg('dev')" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- NOTES / OBSIDIAN TAB -->
+<div class="tab-content" id="tab-notes">
+  <div class="notes-conn-status" id="notes-conn-status">
+    <div class="notes-conn-dot disconnected" id="notes-conn-dot"></div>
+    <span id="notes-conn-text">Not connected — tap settings to configure</span>
+  </div>
+  <div class="notes-container" id="notes-main">
+    <!-- Settings view (shown when not connected) -->
+    <div class="notes-settings" id="notes-settings">
+      <label>Obsidian REST API Host</label>
+      <input type="text" id="obsidian-host" placeholder="https://127.0.0.1:27124" value="">
+      <div class="settings-hint">Default: https://127.0.0.1:27124 (HTTPS) or http://127.0.0.1:27123 (HTTP)</div>
+
+      <label>API Key</label>
+      <input type="password" id="obsidian-api-key" placeholder="Paste your API key from Obsidian plugin settings">
+      <div class="settings-hint">Install the "Local REST API" community plugin in Obsidian, then copy the API key from its settings.</div>
+
+      <button class="connect-btn" onclick="obsidianConnect()">Connect to Vault</button>
+      <button class="disconnect-btn" style="display:none" id="obsidian-disconnect-btn" onclick="obsidianDisconnect()">Disconnect</button>
+    </div>
+
+    <!-- Vault browser (shown when connected) -->
+    <div style="display:none;flex-direction:column;flex:1;overflow:hidden;" id="notes-browser">
+      <div class="notes-toolbar">
+        <input type="text" id="notes-search" placeholder="Search vault..." onkeydown="if(event.key==='Enter')obsidianSearch()">
+        <button onclick="obsidianSearch()" title="Search">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </button>
+        <button onclick="obsidianNewNote()" title="New note">
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        </button>
+        <button onclick="obsidianShowSettings()" title="Settings" id="notes-settings-btn">
+          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"/></svg>
+        </button>
+      </div>
+      <div class="notes-breadcrumb" id="notes-breadcrumb">
+        <span onclick="obsidianBrowse('')">Vault</span>
+      </div>
+      <div class="notes-list" id="notes-list">
+        <div class="dash-empty">Loading vault...</div>
+      </div>
+    </div>
+
+    <!-- Note viewer (shown when reading a note) -->
+    <div style="display:none;flex-direction:column;flex:1;overflow:hidden;" id="notes-viewer">
+      <div class="note-viewer-header">
+        <button class="back-btn" onclick="obsidianBack()">
+          <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <span class="note-viewer-title" id="note-title"></span>
+        <div class="note-viewer-actions">
+          <button id="note-edit-btn" onclick="obsidianToggleEdit()">Edit</button>
+          <button id="note-save-btn" style="display:none" onclick="obsidianSaveNote()">Save</button>
+        </div>
+      </div>
+      <div class="note-content" id="note-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LINKS TAB -->
+<div class="tab-content" id="tab-links">
+  <div class="links-list" id="links-container">
+    <div class="dash-empty">Loading links...</div>
+  </div>
+</div>
+
+<!-- ══════════ BOTTOM TAB BAR ══════════ -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('general')" id="tbtn-general">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    General
+    <span class="badge" id="badge-general"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('dee')" id="tbtn-dee">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    Dee
+    <span class="badge" id="badge-dee"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('cfo')" id="tbtn-cfo">
+    <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+    CFO
+    <span class="badge" id="badge-cfo"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('pm')" id="tbtn-pm">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    1PS
+    <span class="badge" id="badge-pm"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('uw')" id="tbtn-uw">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    UW
+    <span class="badge" id="badge-uw"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('dev')" id="tbtn-dev">
+    <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+    Dev
+    <span class="badge" id="badge-dev"></span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('notes')" id="tbtn-notes">
+    <svg viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>
+    Notes
+  </button>
+  <button class="tab-btn" onclick="switchTab('links')" id="tbtn-links">
+    <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+    Links
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Config ──
+  var WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbypcDJBRkapCrZMa0sdG4_7vNFyxmzFDnk7TaKKdI6302F3hTvbJcKhzztPrwrhsR1L7g/exec';
+  var API_KEY = 'Matan-Orchestra-046579594-Shekel';
+  var SPREADSHEET_ID = '1tuUWRFMkC2QS2YKyEUrQ0YcDdUpdW3svwzPiCPjx1Qc';
+  var SHEET_NAME = 'Chat Relay';
+  var BASE_URL = 'https://orchestra-london.github.io/orchestra-app/';
+  var POLL_INTERVAL = 8000;
+
+  // ElevenLabs (set API key to enable)
+  var ELEVEN_API_KEY = '';
+  var ELEVEN_VOICE_ID = 'pNInz6obpgDQGcFmaJgB'; // Adam - natural male voice
+
+  // ── Agent tab mapping ──
+  var AGENT_TABS = {
+    'HRAIM': 'dee',
+    'CFO': 'cfo',
+    'PS1 PM': 'pm',
+    'Underwriter': 'uw',
+    'Programming Agent': 'dev'
+  };
+  var TAB_AGENTS = {
+    'dee': 'HRAIM',
+    'cfo': 'CFO',
+    'pm': 'PS1 PM',
+    'uw': 'Underwriter',
+    'dev': 'Programming Agent'
+  };
+
+  // ── State ──
+  var currentTab = 'general';
+  var currentLang = 'en-GB';
+  var lastRowCount = 0;
+  var pollTimer = null;
+  var isRecording = false;
+  var recognition = null;
+  var finalTranscript = '';
+  var interimTranscript = '';
+  var activeInputTab = 'general';
+
+  // ── DOM refs ──
+  var statusDot = document.getElementById('statusDot');
+  var statusText = document.getElementById('statusText');
+  var toastEl = document.getElementById('toast');
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // ══════════ TAB SWITCHING ══════════
+  window.switchTab = function(tab) {
+    if (currentTab === tab) return;
+    document.getElementById('tab-' + currentTab).classList.remove('active');
+    document.getElementById('tbtn-' + currentTab).classList.remove('active');
+    currentTab = tab;
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tbtn-' + tab).classList.add('active');
+
+    // Clear badge
+    var badge = document.getElementById('badge-' + tab);
+    if (badge) { badge.style.display = 'none'; badge.textContent = ''; }
+
+    // Scroll chat to bottom
+    var chatEl = document.getElementById('chat-' + tab);
+    if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
+  };
+
+  // ══════════ SEND MESSAGE ══════════
+  window.sendMsg = function(tab) {
+    var input = document.getElementById('msgInput-' + tab);
+    var text = input.value.trim();
+    if (!text) return;
+
+    // Determine agent
+    var agent;
+    if (tab === 'general') {
+      agent = document.getElementById('agentSelect-general').value;
+    } else {
+      agent = TAB_AGENTS[tab] || 'General';
+    }
+
+    var now = new Date();
+    var timestamp = now.toLocaleString('en-GB', {
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
+
+    // Add bubble to current tab
+    addBubble('chat-' + tab, 'Matan', agent, text, timestamp, 'pending');
+
+    // If sent from General to a specific agent, also add to that agent's tab
+    if (tab === 'general' && agent !== 'General' && AGENT_TABS[agent]) {
+      addBubble('chat-' + AGENT_TABS[agent], 'Matan', agent, text, timestamp, 'pending');
+    }
+
+    // Clear
+    input.value = '';
+    input.style.height = 'auto';
+    var sendBtn = document.getElementById('sendBtn-' + tab);
+    if (sendBtn) sendBtn.disabled = true;
+
+    // Write to sheet
+    var row = [[timestamp, 'Matan', agent, text, 'new', '']];
+    fetch(WEBHOOK_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({
+        action: 'writeSheet', apiKey: API_KEY,
+        spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME,
+        data: row, startCell: 'A' + (lastRowCount + 2), clear: false
+      })
+    }).then(function() {
+      // Remove pending spinners
+      removePending('chat-' + tab);
+      if (tab === 'general' && agent !== 'General' && AGENT_TABS[agent]) {
+        removePending('chat-' + AGENT_TABS[agent]);
+      }
+      lastRowCount++;
+      showToast('Sent', 'success');
+    }).catch(function() {
+      showToast('Send failed', 'error');
+    });
+  };
+
+  function removePending(chatId) {
+    var el = document.getElementById(chatId);
+    if (!el) return;
+    var pending = el.querySelectorAll('.msg.pending');
+    for (var i = 0; i < pending.length; i++) pending[i].classList.remove('pending');
+  }
+
+  // ══════════ CHAT BUBBLES ══════════
+  function addBubble(chatId, sender, agent, text, time, extraClass) {
+    var chatEl = document.getElementById(chatId);
+    if (!chatEl) return;
+    var div = document.createElement('div');
+    var isMatan = sender === 'Matan';
+    div.className = 'msg ' + (isMatan ? 'matan' : 'claude') + (extraClass ? ' ' + extraClass : '');
+
+    var html = '';
+    if (!isMatan) {
+      html += '<div class="msg-agent">' + esc(agent || 'Claude') + '</div>';
+    }
+    html += esc(text);
+    html += '<div class="msg-meta">';
+    if (isMatan) {
+      html += (agent !== 'General' ? '@' + esc(agent) + ' · ' : '') + (time || '');
+    } else {
+      html += time || '';
+    }
+    html += '</div>';
+
+    if (!isMatan && text.length > 0) {
+      html += '<button class="read-btn" onclick="event.stopPropagation();speakText(this)" data-text="' + escA(text) + '">'
+        + '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>'
+        + 'Listen</button>';
+    }
+
+    div.innerHTML = html;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  // ══════════ POLL CHAT DATA ══════════
+  function pollChat() {
+    fetch(BASE_URL + 'chat-data.json?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status !== 200 || !data.data) return;
+        var rows = data.data;
+        var dataRows = rows.slice(1);
+        var newCount = dataRows.length;
+
+        if (newCount > lastRowCount) {
+          for (var i = lastRowCount; i < newCount; i++) {
+            processRow(i, dataRows[i]);
+          }
+          lastRowCount = newCount;
+        }
+
+        // Check existing rows for new responses
+        for (var j = 0; j < Math.min(lastRowCount, dataRows.length); j++) {
+          checkResponse(j, dataRows[j]);
+        }
+
+        statusDot.className = 'status-dot polling';
+        statusText.textContent = 'Relay active · ' + newCount + ' messages';
+      })
+      .catch(function() {
+        statusDot.className = 'status-dot off';
+        statusText.textContent = 'Reconnecting...';
+      });
+  }
+
+  function processRow(idx, row) {
+    if (!row || row.length < 5) return;
+    var sender = (row[1] || '').trim();
+    var agent = (row[2] || '').trim();
+    var message = (row[3] || '').trim();
+    var response = (row[5] || '').trim();
+    var time = (row[0] || '').trim();
+
+    if (sender !== 'Matan' && message) {
+      addBubble('chat-general', sender, agent, message, time);
+      // Also add to agent tab if exists
+      var agentTab = AGENT_TABS[agent];
+      if (agentTab) addBubble('chat-' + agentTab, sender, agent, message, time);
+    }
+
+    if (response && sender === 'Matan') {
+      showResponse(idx, agent, response, time);
+    }
+  }
+
+  function checkResponse(idx, row) {
+    if (!row || row.length < 6) return;
+    var resp = (row[5] || '').trim();
+    if (!resp) return;
+    var sender = (row[1] || '').trim();
+    if (sender !== 'Matan') return;
+    showResponse(idx, (row[2] || '').trim(), resp, (row[0] || '').trim());
+  }
+
+  function showResponse(idx, agent, resp, time) {
+    var respId = 'resp-' + idx;
+    if (document.getElementById(respId)) return;
+
+    // Add to general
+    addBubble('chat-general', 'Claude', agent, resp, time);
+    var lastGeneral = document.getElementById('chat-general').lastElementChild;
+    if (lastGeneral) lastGeneral.id = respId;
+
+    // Add to agent tab
+    var agentTab = AGENT_TABS[agent];
+    if (agentTab) {
+      addBubble('chat-' + agentTab, 'Claude', agent, resp, time);
+      var lastAgent = document.getElementById('chat-' + agentTab).lastElementChild;
+      if (lastAgent) lastAgent.id = respId + '-agent';
+
+      // Show badge if not on that tab
+      if (currentTab !== agentTab) {
+        var badge = document.getElementById('badge-' + agentTab);
+        if (badge) {
+          var count = parseInt(badge.textContent || '0') + 1;
+          badge.textContent = count;
+          badge.style.display = 'flex';
+        }
+      }
+    }
+
+    // Badge for general if not on general
+    if (currentTab !== 'general') {
+      var gBadge = document.getElementById('badge-general');
+      if (gBadge) {
+        var gc = parseInt(gBadge.textContent || '0') + 1;
+        gBadge.textContent = gc;
+        gBadge.style.display = 'flex';
+      }
+    }
+
+    // Auto-speak
+    if (!document.hidden && resp.length < 300) {
+      autoSpeak(resp);
+    }
+  }
+
+  // ══════════ POLL LINKS ══════════
+  function pollLinks() {
+    fetch(BASE_URL + 'links-data.json?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status !== 200 || !data.data) return;
+        renderLinks(data.data);
+      })
+      .catch(function() {
+        // Links might not exist yet, show fallback
+        renderFallbackLinks();
+      });
+  }
+
+  function renderLinks(rows) {
+    var container = document.getElementById('links-container');
+    if (!rows || rows.length <= 1) { renderFallbackLinks(); return; }
+    var html = '';
+    var currentCat = '';
+    for (var i = 1; i < rows.length; i++) {
+      var cat = (rows[i][0] || '').trim();
+      var name = (rows[i][1] || '').trim();
+      var url = (rows[i][2] || '').trim();
+      var icon = (rows[i][3] || 'folder').trim();
+      if (!name || !url) continue;
+
+      if (cat !== currentCat) {
+        currentCat = cat;
+        html += '<div class="link-category">' + esc(cat) + '</div>';
+      }
+
+      var iconSvg = icon === 'sheet'
+        ? '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 2v3H5V5h14zm-7 5h7v4h-7v-4zM5 10h5v4H5v-4zm0 9v-3h5v3H5zm7 0v-3h7v3h-7z"/></svg>'
+        : icon === 'email'
+        ? '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>'
+        : '<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+
+      html += '<a class="link-item" href="' + escA(url) + '" target="_blank" rel="noopener">'
+        + '<div class="link-icon">' + iconSvg + '</div>'
+        + '<span class="link-name">' + esc(name) + '</span>'
+        + '</a>';
+    }
+    container.innerHTML = html || '<div class="dash-empty">No links found.</div>';
+  }
+
+  function renderFallbackLinks() {
+    var links = [
+      ['Operations', 'PS1 Master Dashboard', 'https://docs.google.com/spreadsheets/d/1tuUWRFMkC2QS2YKyEUrQ0YcDdUpdW3svwzPiCPjx1Qc', 'sheet'],
+      ['Operations', 'Orchestra Email Log', 'https://docs.google.com/spreadsheets/d/1hmWgXxfQOQG5tAmVd-JoFyPK8nVg5DzEJTAbSlf_mHc', 'email'],
+      ['Drive', 'Orchestra AI Shared Drive', 'https://drive.google.com/drive/folders/0ADUtBkyeVn1TUk9PVA', 'folder'],
+      ['Drive', 'PS1 Bookkeeper Folder', 'https://drive.google.com/drive/folders/1jnckkYCtlQJ_PWEBjEqdTdhUqm2FberB', 'folder'],
+      ['Drive', 'PS1 Invoices', 'https://drive.google.com/drive/folders/1NWYN-Py3OPlIA74Q6aE5QHjMXwaLxKzo', 'folder'],
+      ['Deals', 'George Street Deal Folder', 'https://drive.google.com/drive/folders/12BE2zuRrMLs2F8rBi4F02QmIksE1Tza2', 'folder'],
+      ['Deals', 'Ashley House Model', 'https://docs.google.com/spreadsheets/d/1Qzn4bGsYBWEO3miJ19Iq7Zu6v4Y2VSzHQ33HwEBLvI4', 'sheet'],
+    ];
+    renderLinks([['Category','Name','URL','Icon']].concat(links.map(function(l){ return l; })));
+  }
+
+  // ══════════ POLL CFO REPORT ══════════
+  function pollCFO() {
+    fetch(BASE_URL + 'cfo-report.json?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data || !data.report) return;
+        var el = document.getElementById('cfo-dash-content');
+        var html = '';
+        if (data.report.title) {
+          html += '<div class="dash-card"><h3>' + esc(data.report.title) + '</h3>';
+          if (data.report.date) html += '<p>' + esc(data.report.date) + '</p>';
+          if (data.report.sections) {
+            for (var s = 0; s < data.report.sections.length; s++) {
+              var sec = data.report.sections[s];
+              html += '<p style="margin-top:6px;font-weight:600;">' + esc(sec.heading) + '</p>';
+              if (sec.items) {
+                for (var it = 0; it < sec.items.length; it++) {
+                  html += '<p>· ' + esc(sec.items[it]) + '</p>';
+                }
+              }
+            }
+          }
+          html += '</div>';
+        }
+        el.innerHTML = html || '<div class="dash-empty">No report yet.</div>';
+      })
+      .catch(function() { /* no report yet, leave placeholder */ });
+  }
+
+  // ══════════ INPUT HANDLERS ══════════
+  var allTabs = ['general','dee','cfo','pm','uw','dev','notes'];
+  allTabs.forEach(function(tab) {
+    var input = document.getElementById('msgInput-' + tab);
+    var btn = document.getElementById('sendBtn-' + tab);
+    if (!input || !btn) return;
+
+    input.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 90) + 'px';
+      btn.disabled = this.value.trim().length === 0;
+      if (currentLang === 'he-IL') {
+        this.style.direction = 'rtl';
+        this.style.textAlign = 'right';
+      }
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (this.value.trim().length > 0) sendMsg(tab);
+      }
+    });
+  });
+
+  // ══════════ LANGUAGE ══════════
+  window.toggleLang = function() {
+    if (currentLang === 'en-GB') {
+      currentLang = 'he-IL';
+      document.getElementById('langToggle').textContent = 'HE';
+      document.getElementById('langToggle').classList.add('he');
+    } else {
+      currentLang = 'en-GB';
+      document.getElementById('langToggle').textContent = 'EN';
+      document.getElementById('langToggle').classList.remove('he');
+    }
+  };
+
+  // ══════════ VOICE RECORDING ══════════
+  window.toggleMic = function(tab) {
+    activeInputTab = tab;
+    isRecording ? stopMic() : startMic(tab);
+  };
+
+  function startMic(tab) {
+    if (!SpeechRecognition) { showToast('Not supported', 'error'); return; }
+    navigator.mediaDevices.getUserMedia({audio:true})
+      .then(function(stream) {
+        stream.getTracks().forEach(function(t){t.stop();});
+        initRecognition(tab);
+      })
+      .catch(function() { showToast('Allow microphone', 'error'); });
+  }
+
+  function initRecognition(tab) {
+    recognition = new SpeechRecognition();
+    recognition.lang = currentLang;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    var input = document.getElementById('msgInput-' + tab);
+    var micBtn = input ? input.parentElement.querySelector('.mic-btn') : null;
+    finalTranscript = input ? input.value : '';
+
+    recognition.onstart = function() {
+      isRecording = true;
+      if (micBtn) micBtn.classList.add('recording');
+      showToast('Listening...', '');
+    };
+    recognition.onresult = function(event) {
+      interimTranscript = '';
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + ' ';
+        else interimTranscript += event.results[i][0].transcript;
+      }
+      if (input) {
+        input.value = finalTranscript + interimTranscript;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 90) + 'px';
+        var btn = document.getElementById('sendBtn-' + tab);
+        if (btn) btn.disabled = input.value.trim().length === 0;
+      }
+    };
+    recognition.onerror = function(event) {
+      if (event.error !== 'no-speech') showToast('Mic error: ' + event.error, 'error');
+    };
+    recognition.onend = function() {
+      if (isRecording) { try { recognition.start(); } catch(e) { cleanMic(tab); } return; }
+      cleanMic(tab);
+    };
+    try { recognition.start(); } catch(e) { showToast('Mic failed', 'error'); }
+  }
+
+  function stopMic() {
+    isRecording = false;
+    if (recognition) recognition.stop();
+    cleanMic(activeInputTab);
+  }
+
+  function cleanMic(tab) {
+    isRecording = false;
+    var input = document.getElementById('msgInput-' + tab);
+    var micBtn = input ? input.parentElement.querySelector('.mic-btn') : null;
+    if (micBtn) micBtn.classList.remove('recording');
+    if (input) {
+      input.value = (finalTranscript + interimTranscript).trim();
+      var btn = document.getElementById('sendBtn-' + tab);
+      if (btn) btn.disabled = input.value.trim().length === 0;
+    }
+    interimTranscript = '';
+    finalTranscript = '';
+  }
+
+  // ══════════ TEXT-TO-SPEECH ══════════
+  var bestVoice = null;
+  var voicePrefs = [
+    'Daniel','Samantha','Karen','Moira','Rishi','Tessa',
+    'Google UK English Male','Google UK English Female',
+    'Microsoft Ryan','Microsoft Sonia','en-GB','en-US'
+  ];
+
+  function pickBestVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return;
+    for (var p = 0; p < voicePrefs.length; p++) {
+      var pref = voicePrefs[p].toLowerCase();
+      for (var v = 0; v < voices.length; v++) {
+        var name = (voices[v].name || '').toLowerCase();
+        var lang = (voices[v].lang || '').toLowerCase();
+        if (name.indexOf(pref) >= 0 || lang.indexOf(pref) >= 0) {
+          bestVoice = voices[v]; return;
+        }
+      }
+    }
+    for (var i = 0; i < voices.length; i++) {
+      if ((voices[i].lang || '').indexOf('en') === 0) { bestVoice = voices[i]; return; }
+    }
+  }
+
+  if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = pickBestVoice;
+  }
+  pickBestVoice();
+
+  // ElevenLabs TTS
+  function elevenSpeak(text, btn) {
+    if (!ELEVEN_API_KEY) return false;
+    btn.classList.add('speaking');
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Loading...';
+
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/' + ELEVEN_VOICE_ID, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': ELEVEN_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('ElevenLabs error');
+      return r.blob();
+    })
+    .then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var audio = new Audio(url);
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
+      audio.onended = function() {
+        btn.classList.remove('speaking');
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+        URL.revokeObjectURL(url);
+      };
+      audio.play();
+      // Store ref for stop
+      btn._audio = audio;
+    })
+    .catch(function() {
+      // Fallback to browser TTS
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      browserSpeak(text, btn);
+    });
+    return true;
+  }
+
+  function browserSpeak(text, btn) {
+    var utter = new SpeechSynthesisUtterance(text);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice ? bestVoice.lang : 'en-GB';
+    utter.rate = 0.95;
+    utter.pitch = 1.0;
+    btn.classList.add('speaking');
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Stop';
+    utter.onend = function() {
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+    };
+    window.speechSynthesis.speak(utter);
+  }
+
+  window.speakText = function(btn) {
+    var text = btn.getAttribute('data-text');
+    // Check if already playing
+    if (btn._audio && !btn._audio.paused) {
+      btn._audio.pause();
+      btn._audio = null;
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      return;
+    }
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      btn.classList.remove('speaking');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Listen';
+      return;
+    }
+    // Try ElevenLabs first, fallback to browser
+    if (!elevenSpeak(text, btn)) {
+      browserSpeak(text, btn);
+    }
+  };
+
+  function autoSpeak(text) {
+    if (window.speechSynthesis.speaking) return;
+    if (ELEVEN_API_KEY) return; // Don't auto-speak with ElevenLabs (costs chars)
+    var utter = new SpeechSynthesisUtterance(text);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice ? bestVoice.lang : 'en-GB';
+    utter.rate = 0.95;
+    window.speechSynthesis.speak(utter);
+  }
+
+  // ══════════ HELPERS ══════════
+  function showToast(msg, type) {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast ' + (type || '') + ' show';
+    setTimeout(function() { toastEl.className = 'toast'; }, 2500);
+  }
+
+  function esc(t) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(t || ''));
+    return d.innerHTML;
+  }
+
+  function escA(t) {
+    return (t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ══════════ OBSIDIAN VAULT INTEGRATION ══════════
+  var obsidianHost = '';
+  var obsidianApiKey = '';
+  var obsidianConnected = false;
+  var obsidianCurrentPath = '';
+  var obsidianCurrentNote = null;
+  var obsidianIsEditing = false;
+  var obsidianVaultFiles = [];
+
+  // Load saved settings
+  try {
+    obsidianHost = localStorage.getItem('obsidian-host') || '';
+    obsidianApiKey = localStorage.getItem('obsidian-api-key') || '';
+    if (obsidianHost) document.getElementById('obsidian-host').value = obsidianHost;
+    if (obsidianApiKey) document.getElementById('obsidian-api-key').value = obsidianApiKey;
+  } catch(e) {}
+
+  function obsidianApi(method, path, body) {
+    var url = obsidianHost.replace(/\/+$/, '') + path;
+    var headers = { 'Authorization': 'Bearer ' + obsidianApiKey };
+    var opts = { method: method, headers: headers };
+    if (body !== undefined) {
+      if (typeof body === 'string') {
+        headers['Content-Type'] = 'text/markdown';
+        opts.body = body;
+      } else {
+        headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(body);
+      }
+    }
+    // Accept JSON for listings, text for file content
+    if (path.indexOf('/vault') === 0 && method === 'GET') {
+      headers['Accept'] = 'application/vnd.olrapi.note+json';
+    }
+    return fetch(url, opts);
+  }
+
+  window.obsidianConnect = function() {
+    var host = document.getElementById('obsidian-host').value.trim();
+    var key = document.getElementById('obsidian-api-key').value.trim();
+
+    if (!host) host = 'https://127.0.0.1:27124';
+    if (!key) { showToast('API key required', 'error'); return; }
+
+    obsidianHost = host;
+    obsidianApiKey = key;
+
+    // Test connection
+    obsidianApi('GET', '/').then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(data) {
+      obsidianConnected = true;
+      try {
+        localStorage.setItem('obsidian-host', obsidianHost);
+        localStorage.setItem('obsidian-api-key', obsidianApiKey);
+      } catch(e) {}
+
+      document.getElementById('notes-conn-dot').className = 'notes-conn-dot connected';
+      document.getElementById('notes-conn-text').textContent = 'Connected' + (data.service ? ' — ' + data.service : '');
+      document.getElementById('notes-settings').style.display = 'none';
+      document.getElementById('notes-browser').style.display = 'flex';
+      document.getElementById('obsidian-disconnect-btn').style.display = 'block';
+
+      showToast('Connected to Obsidian vault', 'success');
+      obsidianBrowse('');
+    }).catch(function(err) {
+      showToast('Connection failed: ' + err.message, 'error');
+    });
+  };
+
+  window.obsidianDisconnect = function() {
+    obsidianConnected = false;
+    obsidianHost = '';
+    obsidianApiKey = '';
+    try {
+      localStorage.removeItem('obsidian-host');
+      localStorage.removeItem('obsidian-api-key');
+    } catch(e) {}
+    document.getElementById('obsidian-host').value = '';
+    document.getElementById('obsidian-api-key').value = '';
+    document.getElementById('notes-conn-dot').className = 'notes-conn-dot disconnected';
+    document.getElementById('notes-conn-text').textContent = 'Not connected — tap settings to configure';
+    document.getElementById('notes-settings').style.display = '';
+    document.getElementById('notes-browser').style.display = 'none';
+    document.getElementById('notes-viewer').style.display = 'none';
+    document.getElementById('obsidian-disconnect-btn').style.display = 'none';
+    showToast('Disconnected', '');
+  };
+
+  window.obsidianShowSettings = function() {
+    var settingsEl = document.getElementById('notes-settings');
+    var browserEl = document.getElementById('notes-browser');
+    var viewerEl = document.getElementById('notes-viewer');
+    if (settingsEl.style.display === 'none') {
+      settingsEl.style.display = '';
+      browserEl.style.display = 'none';
+      viewerEl.style.display = 'none';
+      document.getElementById('notes-settings-btn').classList.add('active');
+      if (obsidianConnected) {
+        document.getElementById('obsidian-disconnect-btn').style.display = 'block';
+        document.getElementById('obsidian-host').value = obsidianHost;
+        document.getElementById('obsidian-api-key').value = obsidianApiKey;
+      }
+    } else if (obsidianConnected) {
+      settingsEl.style.display = 'none';
+      browserEl.style.display = 'flex';
+      document.getElementById('notes-settings-btn').classList.remove('active');
+    }
+  };
+
+  window.obsidianBrowse = function(path) {
+    if (!obsidianConnected) return;
+    obsidianCurrentPath = path;
+
+    // Update breadcrumb
+    var bcEl = document.getElementById('notes-breadcrumb');
+    var parts = path ? path.split('/') : [];
+    var html = '<span onclick="obsidianBrowse(\'\')">Vault</span>';
+    var built = '';
+    for (var i = 0; i < parts.length; i++) {
+      built += (i > 0 ? '/' : '') + parts[i];
+      html += '<span class="bc-sep">/</span>';
+      if (i === parts.length - 1) {
+        html += '<span class="bc-current">' + esc(parts[i]) + '</span>';
+      } else {
+        var p = built;
+        html += '<span onclick="obsidianBrowse(\'' + escA(p) + '\')">' + esc(parts[i]) + '</span>';
+      }
+    }
+    bcEl.innerHTML = html;
+
+    // Hide viewer, show browser
+    document.getElementById('notes-viewer').style.display = 'none';
+    document.getElementById('notes-browser').style.display = 'flex';
+
+    // Fetch directory listing
+    var apiPath = '/vault/' + (path ? encodeURIComponent(path).replace(/%2F/g, '/') + '/' : '');
+    obsidianApi('GET', apiPath).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(data) {
+      var files = data.files || [];
+      obsidianVaultFiles = files;
+      renderVaultList(files, path);
+    }).catch(function(err) {
+      document.getElementById('notes-list').innerHTML = '<div class="dash-empty">Error: ' + esc(err.message) + '</div>';
+    });
+  };
+
+  function renderVaultList(files, currentPath) {
+    var listEl = document.getElementById('notes-list');
+    if (!files || files.length === 0) {
+      listEl.innerHTML = '<div class="dash-empty">Empty folder</div>';
+      return;
+    }
+
+    // Separate folders and files at current level
+    var folders = [];
+    var notes = [];
+
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      var relPath = currentPath ? f.replace(currentPath + '/', '') : f;
+      var slashIdx = relPath.indexOf('/');
+
+      if (slashIdx >= 0) {
+        // This is in a subfolder
+        var folderName = relPath.substring(0, slashIdx);
+        var folderPath = currentPath ? currentPath + '/' + folderName : folderName;
+        var exists = false;
+        for (var k = 0; k < folders.length; k++) {
+          if (folders[k].path === folderPath) { folders[k].count++; exists = true; break; }
+        }
+        if (!exists) folders.push({ name: folderName, path: folderPath, count: 1 });
+      } else if (relPath) {
+        notes.push({ name: relPath, path: f });
+      }
+    }
+
+    // Sort: folders first, then files
+    folders.sort(function(a,b) { return a.name.localeCompare(b.name); });
+    notes.sort(function(a,b) { return a.name.localeCompare(b.name); });
+
+    var html = '';
+
+    for (var fi = 0; fi < folders.length; fi++) {
+      var fd = folders[fi];
+      html += '<div class="notes-item" onclick="obsidianBrowse(\'' + escA(fd.path) + '\')">'
+        + '<div class="notes-item-icon folder-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></div>'
+        + '<div class="notes-item-info"><div class="notes-item-name">' + esc(fd.name) + '</div>'
+        + '<div class="notes-item-meta">' + fd.count + ' item' + (fd.count !== 1 ? 's' : '') + '</div>'
+        + '</div></div>';
+    }
+
+    for (var ni = 0; ni < notes.length; ni++) {
+      var n = notes[ni];
+      var ext = n.name.split('.').pop().toLowerCase();
+      var isMd = ext === 'md';
+      var iconSvg = isMd
+        ? '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>'
+        : '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>';
+
+      var displayName = n.name.replace(/\.md$/, '');
+      html += '<div class="notes-item" onclick="obsidianOpenNote(\'' + escA(n.path) + '\')">'
+        + '<div class="notes-item-icon">' + iconSvg + '</div>'
+        + '<div class="notes-item-info"><div class="notes-item-name">' + esc(displayName) + '</div>'
+        + '<div class="notes-item-meta">' + esc(ext.toUpperCase()) + '</div>'
+        + '</div></div>';
+    }
+
+    listEl.innerHTML = html || '<div class="dash-empty">No files found</div>';
+  }
+
+  window.obsidianOpenNote = function(path) {
+    if (!obsidianConnected) return;
+    obsidianCurrentNote = path;
+    obsidianIsEditing = false;
+
+    var encodedPath = encodeURIComponent(path).replace(/%2F/g, '/');
+    obsidianApi('GET', '/vault/' + encodedPath).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var ct = r.headers.get('content-type') || '';
+      if (ct.indexOf('json') >= 0) return r.json();
+      return r.text().then(function(t) { return { content: t }; });
+    }).then(function(data) {
+      var content = data.content || '';
+      var fileName = path.split('/').pop().replace(/\.md$/, '');
+
+      document.getElementById('note-title').textContent = fileName;
+      document.getElementById('notes-browser').style.display = 'none';
+      document.getElementById('notes-settings').style.display = 'none';
+      document.getElementById('notes-viewer').style.display = 'flex';
+      document.getElementById('note-edit-btn').style.display = '';
+      document.getElementById('note-save-btn').style.display = 'none';
+      document.getElementById('note-edit-btn').classList.remove('active');
+
+      var contentEl = document.getElementById('note-content');
+      contentEl.contentEditable = false;
+      contentEl.className = 'note-content';
+      contentEl.innerHTML = renderMarkdown(content);
+      contentEl.dataset.raw = content;
+    }).catch(function(err) {
+      showToast('Failed to open: ' + err.message, 'error');
+    });
+  };
+
+  window.obsidianToggleEdit = function() {
+    var contentEl = document.getElementById('note-content');
+    var editBtn = document.getElementById('note-edit-btn');
+    var saveBtn = document.getElementById('note-save-btn');
+
+    if (obsidianIsEditing) {
+      // Switch back to preview
+      obsidianIsEditing = false;
+      var raw = contentEl.innerText || contentEl.textContent;
+      contentEl.dataset.raw = raw;
+      contentEl.contentEditable = false;
+      contentEl.className = 'note-content';
+      contentEl.innerHTML = renderMarkdown(raw);
+      editBtn.textContent = 'Edit';
+      editBtn.classList.remove('active');
+      saveBtn.style.display = 'none';
+    } else {
+      // Switch to edit mode
+      obsidianIsEditing = true;
+      contentEl.innerHTML = '';
+      contentEl.textContent = contentEl.dataset.raw || '';
+      contentEl.contentEditable = true;
+      contentEl.className = 'note-content editing';
+      contentEl.focus();
+      editBtn.textContent = 'Preview';
+      editBtn.classList.add('active');
+      saveBtn.style.display = '';
+    }
+  };
+
+  window.obsidianSaveNote = function() {
+    if (!obsidianConnected || !obsidianCurrentNote) return;
+    var contentEl = document.getElementById('note-content');
+    var raw = contentEl.innerText || contentEl.textContent;
+
+    var encodedPath = encodeURIComponent(obsidianCurrentNote).replace(/%2F/g, '/');
+    obsidianApi('PUT', '/vault/' + encodedPath, raw).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      contentEl.dataset.raw = raw;
+      showToast('Saved', 'success');
+    }).catch(function(err) {
+      showToast('Save failed: ' + err.message, 'error');
+    });
+  };
+
+  window.obsidianBack = function() {
+    obsidianCurrentNote = null;
+    obsidianIsEditing = false;
+    document.getElementById('notes-viewer').style.display = 'none';
+    document.getElementById('notes-browser').style.display = 'flex';
+  };
+
+  window.obsidianSearch = function() {
+    if (!obsidianConnected) return;
+    var query = document.getElementById('notes-search').value.trim();
+    if (!query) { obsidianBrowse(obsidianCurrentPath); return; }
+
+    var listEl = document.getElementById('notes-list');
+    listEl.innerHTML = '<div class="dash-empty">Searching...</div>';
+
+    // Update breadcrumb
+    document.getElementById('notes-breadcrumb').innerHTML =
+      '<span onclick="obsidianBrowse(\'\')">Vault</span><span class="bc-sep">/</span><span class="bc-current">Search: ' + esc(query) + '</span>';
+
+    obsidianApi('POST', '/search/simple/', JSON.stringify({ query: query }))
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(results) {
+        if (!results || results.length === 0) {
+          listEl.innerHTML = '<div class="dash-empty">No results for "' + esc(query) + '"</div>';
+          return;
+        }
+        var html = '';
+        for (var i = 0; i < results.length; i++) {
+          var r = results[i];
+          var path = r.filename || r;
+          var displayName = (typeof path === 'string' ? path : '').split('/').pop().replace(/\.md$/, '');
+          html += '<div class="notes-item" onclick="obsidianOpenNote(\'' + escA(path) + '\')">'
+            + '<div class="notes-item-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg></div>'
+            + '<div class="notes-item-info"><div class="notes-item-name">' + esc(displayName) + '</div>'
+            + '<div class="notes-item-meta">' + esc(path) + '</div>'
+            + '</div></div>';
+        }
+        listEl.innerHTML = html;
+      })
+      .catch(function(err) {
+        // Fallback: local filter on cached file list
+        var filtered = obsidianVaultFiles.filter(function(f) {
+          return f.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+        });
+        if (filtered.length === 0) {
+          listEl.innerHTML = '<div class="dash-empty">No results for "' + esc(query) + '"</div>';
+          return;
+        }
+        var html = '';
+        for (var i = 0; i < filtered.length; i++) {
+          var fp = filtered[i];
+          var dn = fp.split('/').pop().replace(/\.md$/, '');
+          html += '<div class="notes-item" onclick="obsidianOpenNote(\'' + escA(fp) + '\')">'
+            + '<div class="notes-item-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg></div>'
+            + '<div class="notes-item-info"><div class="notes-item-name">' + esc(dn) + '</div>'
+            + '<div class="notes-item-meta">' + esc(fp) + '</div>'
+            + '</div></div>';
+        }
+        listEl.innerHTML = html;
+      });
+  };
+
+  window.obsidianNewNote = function() {
+    if (!obsidianConnected) return;
+    var name = prompt('New note name:');
+    if (!name) return;
+    if (name.indexOf('.') === -1) name += '.md';
+    var fullPath = obsidianCurrentPath ? obsidianCurrentPath + '/' + name : name;
+    var encodedPath = encodeURIComponent(fullPath).replace(/%2F/g, '/');
+
+    obsidianApi('PUT', '/vault/' + encodedPath, '').then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      showToast('Created: ' + name, 'success');
+      obsidianOpenNote(fullPath);
+    }).catch(function(err) {
+      showToast('Create failed: ' + err.message, 'error');
+    });
+  };
+
+  // Simple markdown renderer
+  function renderMarkdown(md) {
+    if (!md) return '<div class="dash-empty">Empty note</div>';
+    var lines = md.split('\n');
+    var html = '';
+    var inCode = false;
+    var inList = false;
+    var listType = '';
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+
+      // Code blocks
+      if (line.trim().indexOf('```') === 0) {
+        if (inCode) { html += '</code></pre>'; inCode = false; }
+        else { html += '<pre><code>'; inCode = true; }
+        continue;
+      }
+      if (inCode) { html += esc(line) + '\n'; continue; }
+
+      // Close list if needed
+      if (inList && line.trim() === '') {
+        html += '</' + listType + '>'; inList = false; listType = '';
+        html += '<br>'; continue;
+      }
+
+      // Headers
+      if (line.indexOf('### ') === 0) { html += '<h3>' + inlineMarkdown(line.substring(4)) + '</h3>'; continue; }
+      if (line.indexOf('## ') === 0) { html += '<h2>' + inlineMarkdown(line.substring(3)) + '</h2>'; continue; }
+      if (line.indexOf('# ') === 0) { html += '<h1>' + inlineMarkdown(line.substring(2)) + '</h1>'; continue; }
+
+      // HR
+      if (/^(-{3,}|\*{3,}|_{3,})$/.test(line.trim())) { html += '<hr>'; continue; }
+
+      // Blockquote
+      if (line.indexOf('> ') === 0) { html += '<blockquote>' + inlineMarkdown(line.substring(2)) + '</blockquote>'; continue; }
+
+      // Tasks
+      if (line.trim().indexOf('- [x] ') === 0 || line.trim().indexOf('- [X] ') === 0) {
+        if (!inList) { html += '<ul>'; inList = true; listType = 'ul'; }
+        html += '<li class="task-done">' + inlineMarkdown(line.trim().substring(6)) + '</li>';
+        continue;
+      }
+      if (line.trim().indexOf('- [ ] ') === 0) {
+        if (!inList) { html += '<ul>'; inList = true; listType = 'ul'; }
+        html += '<li>' + inlineMarkdown(line.trim().substring(6)) + '</li>';
+        continue;
+      }
+
+      // Unordered list
+      if (/^\s*[-*+] /.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; listType = 'ul'; }
+        html += '<li>' + inlineMarkdown(line.replace(/^\s*[-*+] /, '')) + '</li>';
+        continue;
+      }
+
+      // Ordered list
+      if (/^\s*\d+\. /.test(line)) {
+        if (!inList) { html += '<ol>'; inList = true; listType = 'ol'; }
+        html += '<li>' + inlineMarkdown(line.replace(/^\s*\d+\. /, '')) + '</li>';
+        continue;
+      }
+
+      // Empty line
+      if (line.trim() === '') { html += '<br>'; continue; }
+
+      // Paragraph
+      html += '<p>' + inlineMarkdown(line) + '</p>';
+    }
+
+    if (inCode) html += '</code></pre>';
+    if (inList) html += '</' + listType + '>';
+
+    return html;
+  }
+
+  function inlineMarkdown(text) {
+    var s = esc(text);
+    // Bold
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/__(.+?)__/g, '<strong>$1</strong>');
+    // Italic
+    s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    s = s.replace(/_(.+?)_/g, '<em>$1</em>');
+    // Code
+    s = s.replace(/`(.+?)`/g, '<code>$1</code>');
+    // Strikethrough
+    s = s.replace(/~~(.+?)~~/g, '<del>$1</del>');
+    // Links
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Obsidian wikilinks
+    s = s.replace(/\[\[([^\]|]+?)(?:\|([^\]]+?))?\]\]/g, function(m, link, display) {
+      return '<a href="#" onclick="event.preventDefault();obsidianOpenNote(\'' + escA(link + '.md') + '\')">' + (display || link) + '</a>';
+    });
+    // Highlight
+    s = s.replace(/==(.+?)==/g, '<mark>$1</mark>');
+    return s;
+  }
+
+  // Auto-connect on load if saved settings exist
+  if (obsidianHost && obsidianApiKey) {
+    setTimeout(function() { obsidianConnect(); }, 500);
+  }
+
+  // ══════════ INIT ══════════
+  pollChat();
+  pollTimer = setInterval(pollChat, POLL_INTERVAL);
+  pollLinks();
+  setInterval(pollLinks, 60000); // refresh links every 60s
+  pollCFO();
+  setInterval(pollCFO, 60000);
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    } else {
+      if (!pollTimer) { pollChat(); pollTimer = setInterval(pollChat, POLL_INTERVAL); }
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
